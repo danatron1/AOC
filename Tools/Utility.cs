@@ -11,19 +11,7 @@ using System.Threading.Tasks;
 
 public static class Utility
 {
-    //Find your session cookie by going to adventofcode.com, pressing F12, going to the application tab, and copying the value of "session"
-    static string? sessionCookieCached;
-    public static string cookie
-    {
-        get 
-        {
-            sessionCookieCached ??= File.ReadAllText(@"C:\Users\Danatron1\source\repos\AOCSessionCookie.txt");
-            return sessionCookieCached; 
-        }
-    }
-
     public const string folderPath = @"C:\Users\Danatron1\source\repos\AOC";
-    public const string website = "https://adventofcode.com";
     public static string NameFor(int day, int year) => $"D{day.ToString().PadLeft(2, '0')}_{year}";
     public static void Swap<T>(this T[] array, int location1, int location2)
     {
@@ -45,42 +33,7 @@ public static class Utility
         return pathFull;
     }
     public static int[] Digits(this string s, char zero = '0') => s.Select(c => c - zero).ToArray();
-    public static async Task<string[]> DownloadAOCInput(int day, int year, bool example = false)
-    {
-        string pathFull = $@"{folderPath}\Inputs\{year}";
-        Directory.CreateDirectory(pathFull);
-        pathFull += $@"\{NameFor(day, year)}_{(example ? "Example" : "Input")}.txt";
-        if (example)
-        {
-            if (!File.Exists(pathFull))
-            {
-                Console.WriteLine($"First time using example inputs for {NameFor(day, year)}.\nCreated file at {pathFull}\nPaste example inputs here, leaving a blank line when done:");
-                List<string> examples = new();
-                while (true)
-                {
-                    string? testInput = Console.ReadLine();
-                    if (string.IsNullOrWhiteSpace(testInput)) break;
-                    examples.Add(testInput);
-                } 
-                File.WriteAllLines(pathFull, examples.ToArray());
-                return examples.ToArray();
-            }
-            return File.ReadAllLines(pathFull);
-        }
-        if (!File.Exists(pathFull))
-        {
-            Uri uri = new Uri(website);
-            CookieContainer cookies = new CookieContainer();
-            cookies.Add(uri, new Cookie("session", cookie));
-            using var file = new FileStream(pathFull, FileMode.Create, FileAccess.Write, FileShare.None);
-            using var handler = new HttpClientHandler() { CookieContainer = cookies };
-            using var client = new HttpClient(handler) { BaseAddress = uri };
-            using var response = await client.GetAsync($"/{year}/day/{day}/input");
-            using var stream = await response.Content.ReadAsStreamAsync();
-            await stream.CopyToAsync(file);
-        }
-        return File.ReadAllLines(pathFull);
-    }
+    
     public static void Copy(object item)
     {
         if (item == null) return;
@@ -118,6 +71,12 @@ public static class Utility
         }
         return count;
     }
+    /// <summary>
+    /// Counts the number of times a given string appears in the source
+    /// </summary>
+    /// <param name="whole">the source to read</param>
+    /// <param name="section">the thing to be counted</param>
+    /// <returns>the number of times section appears in whole</returns>
     public static int FrequencyOf(this string whole, params string[] section)
     {
         int count = 0;
@@ -172,25 +131,6 @@ public static class Utility
             else if (forceMatchingLength) converted.SetValue(default, indices);
         }
         return converted;
-    }
-
-    internal static async Task<string> SubmitAOCAnswer(string answer, int day, int year, int part)
-    {
-        string responseText = "No response given";
-        KeyValuePair<string, string>[] pairs = new KeyValuePair<string, string>[]
-        {
-            new("level", part.ToString()),
-            new("answer", answer)
-        };
-        FormUrlEncodedContent content = new FormUrlEncodedContent(pairs);
-        Uri uri = new Uri(website);
-        CookieContainer cookies = new CookieContainer();
-        cookies.Add(uri, new Cookie("session", cookie));
-        using var handler = new HttpClientHandler() { CookieContainer = cookies };
-        using var client = new HttpClient(handler) { BaseAddress = uri };
-        using var response = await client.PostAsync($"/{year}/day/{day}/answer", content);
-        responseText = await response.Content.ReadAsStringAsync();
-        return responseText;
     }
     /// <summary>
     /// Finds all possible combinations of array elements.

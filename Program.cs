@@ -1,6 +1,10 @@
-﻿double ratio = 0.2;
+﻿string[] colours = { "White", "Blue", "Black", "Red", "Green" };
 
-for (int size = 9; size < 50; size++)
+foreach (string[] item in colours.Pairs())
 {
-    Console.WriteLine($"{size}x{size}: {(int)Math.Ceiling(size*size*ratio)} mines");
+    Console.WriteLine($"[{string.Join(", ", item)}]");
 }
+
+string s = "the quick brown fox jumps over the lazy dog";
+
+Console.WriteLine(s.FrequencyOf("the"));
