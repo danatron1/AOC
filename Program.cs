@@ -7,4 +7,3 @@ foreach (string[] item in colours.Pairs())
 
 string s = "the quick brown fox jumps over the lazy dog";
 
-Console.WriteLine(s.FrequencyOf("the"));
