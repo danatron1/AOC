@@ -4,15 +4,15 @@ using System.ComponentModel;
 public static class ArrayExt
 {
     public static Random rng = new Random();
-    public static void Shuffle<T>(this T[] array)
+    public static void Shuffle<T>(this List<T> array)
     {
-        for (int i = array.Length - 1; i > 0; i--)
+        for (int i = array.Count - 1; i > 0; i--)
         {
             array.Swap(i, rng.Next(i));
         }
     }
-    public static void Swap<T>(this T[] array, params int[] locations) => array.Swap(locations[0], locations[1]);
-    public static void Swap<T>(this T[] array, int location1, int location2)
+    public static void Swap<T>(this List<T> array, params int[] locations) => array.Swap(locations[0], locations[1]);
+    public static void Swap<T>(this List<T> array, int location1, int location2)
     {
         (array[location2], array[location1]) = (array[location1], array[location2]);
     }
