@@ -77,7 +77,7 @@ namespace AOC
             int startY = int.Parse(start.Split(',')[1]);
             int endX = int.Parse(end.Split(',')[0]);
             int endY = int.Parse(end.Split(',')[1]);
-            int steps = 1 + Math.Max(Math.Abs(startX - endX), Math.Abs(startY-endY));
+            int steps = 1 + Math.Max(Math.Abs(startX - endX), Math.Abs(startY - endY));
             for (int i = 0; i < steps; i++)
             {
                 int thisX = startX < endX ? startX + i : startX - i;

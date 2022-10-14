@@ -1,20 +1,40 @@
+using AOC.Items;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AOC
+namespace AOC.Y2015;
+
+internal class D18_2015 : Day<char>
 {
-    internal class D18_2015 : Day
+    public override void PartA()
     {
-        public override void PartA()
+        GOL gol = new();
+        gol.grid.SetLimits(InputRaw.Length, InputRaw.Length);
+        gol.grid.SetPoints(Input2D.Select2D(c => c == '#'));
+        gol.Iterate(100);
+        Submit(gol.grid.GetPoints().Count());
+    }
+    public override void PartB()
+    {
+        GOL gol = new();
+        gol.grid.SetLimits(InputRaw.Length, InputRaw.Length);
+        gol.grid.SetPoints(Input2D.Select2D(c => c == '#'));
+        for (int i = 0; i < 100; i++)
         {
-            throw new NotImplementedException();
+            TurnOnCorners();
+            gol.Iterate(1);
         }
-        public override void PartB()
+        TurnOnCorners();
+        Submit(gol.grid.GetPoints().Count());
+        void TurnOnCorners()
         {
-            throw new NotImplementedException();
+            foreach (Point2D p in gol.grid.GetCorners())
+            {
+                gol.grid[p] = true;
+            }
         }
     }
 }

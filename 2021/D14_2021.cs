@@ -14,7 +14,7 @@ namespace AOC
         Dictionary<string, char> rules;
         public override void PartA()
         {
-            LoadData(); 
+            LoadData();
             Stopwatch sw = new Stopwatch();
             sw.Start();
             IteratePolymer(10);
@@ -38,7 +38,7 @@ namespace AOC
             rules = new Dictionary<string, char>();
             letterCounts = new Tally<char>();
             pairs = new Tally<string>();
-            string[] input = GetInputForDay(example: false);
+            string[] input = GetInputForDay();
             //load in rules
             for (int i = 2; i < input.Length; i++)
             {

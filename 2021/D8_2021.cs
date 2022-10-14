@@ -18,7 +18,7 @@ namespace AOC
             for (int i = 0; i < input.Length; i++)
             {
                 //remove the bits we don't need for part 1
-                input[i] = input[i].Substring(input[i].IndexOf('|')+1).Trim();
+                input[i] = input[i].Substring(input[i].IndexOf('|') + 1).Trim();
                 string[] digits = input[i].Split(' ');
                 foreach (string digit in digits)
                 {

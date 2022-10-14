@@ -21,11 +21,11 @@ namespace AOC
             public TransparentSheet(string[] pointPairs, int X = 0, int Y = 0)
             {
                 if (X == 0) X = pointPairs.Select(s => int.Parse(s[..s.IndexOf(',')])).Max() + 1;
-                if (Y == 0) Y = pointPairs.Select(s => int.Parse(s[(s.IndexOf(',')+1)..])).Max() + 1;
+                if (Y == 0) Y = pointPairs.Select(s => int.Parse(s[(s.IndexOf(',') + 1)..])).Max() + 1;
                 realY = Y;
                 realX = X;
                 Console.WriteLine($"X: {X}, Y: {Y}");
-                grid = new bool[realX,realY];
+                grid = new bool[realX, realY];
                 foreach (string p in pointPairs)
                 {
                     string[] s = p.Split(',');
@@ -98,7 +98,7 @@ namespace AOC
         public override void PartA()
         {
             //825 too high
-            string[] input = GetInputForDay(example: false);
+            string[] input = GetInputForDay();
 
             string[] instructions = input.Where(c => c.Length > 0 && c[0] == 'f').ToArray();
             string[] points = input.Where(c => c.Length > 0 && char.IsDigit(c[0])).ToArray();
@@ -109,7 +109,7 @@ namespace AOC
             sheet.PrintBoard(i); //starting board
             foreach (string instruction in instructions)
             {
-                int value = int.Parse(instruction[(instruction.IndexOf('=')+1)..]);
+                int value = int.Parse(instruction[(instruction.IndexOf('=') + 1)..]);
                 if (instruction.Contains('y')) sheet.FoldY(value);
                 else sheet.FoldX(value);
                 sheet.PrintBoard(++i);

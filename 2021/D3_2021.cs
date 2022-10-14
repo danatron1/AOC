@@ -12,7 +12,7 @@ namespace AOC
         {
             string[] input = GetInputForDay();
             uint gamma = 0;
-            for (int i = 0;i < input[0].Length; i++)
+            for (int i = 0; i < input[0].Length; i++)
             {
                 gamma <<= 1;
                 if (MostCommonBit(input, i) == '1') gamma++;
@@ -109,7 +109,7 @@ namespace AOC
             if (input.Count(c => c[position] == '1') >= input.Count() / 2) return '1';
             return '0';
         }
-        
+
 
         public override void Solve() => PartB();
     }

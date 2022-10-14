@@ -1,4 +1,10 @@
-namespace AOC
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AOC.Y2022
 {
     internal class D06_2022 : Day
     {

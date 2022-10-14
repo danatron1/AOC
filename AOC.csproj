@@ -20,4 +20,8 @@
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="2022\" />
+  </ItemGroup>
+
 </Project>

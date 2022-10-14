@@ -13,7 +13,7 @@ namespace AOC
         {
             string chunkOpen = "([{<";
             string chunkClose = ")]}>";
-            int[] scores = { 3, 57, 1197, 25137};
+            int[] scores = { 3, 57, 1197, 25137 };
             string[] input = GetInputForDay();
             int corruptedScore = 0;
             Stack<int> toClose;
@@ -29,7 +29,7 @@ namespace AOC
                         if (chunkClose.IndexOf(item[i]) != chunkOpen.IndexOf(item[toClose.Peek()]))
                         {
                             corruptedScore += scores[chunkClose.IndexOf(item[i])];
-                            Console.WriteLine($"{item.Substring(0,50)}..., Expecting {chunkClose[chunkOpen.IndexOf(item[toClose.Peek()])]} (position {toClose.Peek(),-2})" +
+                            Console.WriteLine($"{item.Substring(0, 50)}..., Expecting {chunkClose[chunkOpen.IndexOf(item[toClose.Peek()])]} (position {toClose.Peek(),-2})" +
                                 $", but found {item[i]} (position {i}) instead. +{scores[chunkClose.IndexOf(item[i])]} points!");
                             break;
                         }
