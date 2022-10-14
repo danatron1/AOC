@@ -8,6 +8,7 @@ using static AOC.Items.Graph;
 namespace AOC.Items;
 public class Pathfinder
 {
+    #region UNFINISHED PROJECT
     //Vertex Start;
     Graph Graph;
 
@@ -53,4 +54,5 @@ public class Pathfinder
             Distance = distance;
         }
     }
+    #endregion
 }
