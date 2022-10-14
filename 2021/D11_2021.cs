@@ -33,7 +33,7 @@ namespace AOC
             for (i = 0; i < octopus.Length; i++)
             {
                 if (octopus[x, y] == 0) Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.Write(octopus[x,y]);
+                Console.Write(octopus[x, y]);
                 Console.ForegroundColor = ConsoleColor.Gray;
                 if (x + 1 == octopus.GetLength(1)) Console.WriteLine();
             }

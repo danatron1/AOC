@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AOC
+namespace AOC.Y2022
 {
     internal class D24_2022 : Day
     {

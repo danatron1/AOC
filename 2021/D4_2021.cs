@@ -28,7 +28,7 @@ namespace AOC
             {
                 int wins = MarkAllBoards(num);
                 if (wins == lastWinCount) continue;
-                Console.WriteLine($"Called number {num,-2}, now at {wins,-2} wins (+{wins-lastWinCount})");
+                Console.WriteLine($"Called number {num,-2}, now at {wins,-2} wins (+{wins - lastWinCount})");
                 lastWinCount = wins;
                 if (wins == 1) Console.WriteLine($"First win!\n{BingoBoard.mostRecentWin}\n");
                 if (wins == boards.Count) Console.WriteLine($"Last win!\n{BingoBoard.mostRecentWin}\n");

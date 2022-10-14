@@ -95,9 +95,9 @@ namespace AOC
                 int rightshift = Math.Max(0, 8 - count - BitPointer);
                 int leftmod = 1 << count;
 
-                
 
-                
+
+
                 if (BitPointer + count < 8) //if this taking wouldn't finish a byte
                 {
                     result = (bits[BytePointer] >> 8 - BitPointer - count) & ((1 << count) - 1);
@@ -105,7 +105,7 @@ namespace AOC
                 else
                 {
                     //finish first byte
-                    result = bits[BytePointer] & ((1 << 8-BitPointer) - 1);
+                    result = bits[BytePointer] & ((1 << 8 - BitPointer) - 1);
                     count -= 8 - BitPointer;
                     //middle bytes
                     while (count >= 8)
@@ -121,7 +121,7 @@ namespace AOC
         }
         public override void PartA()
         {
-                          //3  5
+            //3  5
             byte test = 0b01110110;
             int pointer = 3;
             int length = 3;

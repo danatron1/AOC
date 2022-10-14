@@ -11,7 +11,7 @@ namespace AOC
         public override void PartA()
         {
             long input = NumberFromPassword(GetInputForDay()[0]);
-            while (!Valid(PasswordFromNumber(++input)));
+            while (!Valid(PasswordFromNumber(++input))) ;
             Submit(PasswordFromNumber(input));
         }
         string PasswordFromNumber(long number)

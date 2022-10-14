@@ -42,8 +42,9 @@ namespace AOC
         }
         void MapCaves(bool example = false)
         {
+            useExampleInput = example;
             caves = new List<Cave>();
-            string[] input = GetInputForDay(example: example);
+            string[] input = GetInputForDay();
             int i = 0;
             foreach (string item in input)
             {
@@ -55,7 +56,7 @@ namespace AOC
                         Cave newCave = new Cave(half, i);
                         caves.Add(newCave);
                         if (newCave.code > 0) i++;
-                        
+
                     }
                 }
                 Cave left = caves.First(c => c.name == halves[0]);
@@ -86,7 +87,7 @@ namespace AOC
                 visits |= cave.code;
                 lastVisit = cave;
             }
-            
+
             //public Route(Route route, Cave cave)
             //{
             //    visited = new HashSet<Cave>();

@@ -1,20 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AOC
+namespace AOC.Y2015;
+
+internal class D17_2015 : Day<int>
 {
-    internal class D17_2015 : Day
+    public override void PartA()
     {
-        public override void PartA()
-        {
-            throw new NotImplementedException();
-        }
-        public override void PartB()
-        {
-            throw new NotImplementedException();
-        }
+        Submit(Input.Combinations().Where(x => x.Sum() == 150).Count());
+    }
+    public override void PartB()
+    {
+        int len = Input.Combinations().Where(x => x.Sum() == 150).Shortest().Count();
+        Submit(Input.Combinations().Where(x => x.Sum() == 150 && x.Count() == len).Count());
     }
 }

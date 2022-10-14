@@ -69,16 +69,30 @@ public class Tally<T> : IEnumerable<T> where T : notnull
         RemoveIfNecessary(item);
         return true;
     }
+    public void AddRange(Tally<T> collection)
+    {
+        if (collection is null) throw new ArgumentNullException();
+        foreach (var item in collection) Add(item, collection[item]);
+    }
+    public void SubtractRange(Tally<T> collection)
+    {
+        if (collection is null) throw new ArgumentNullException();
+        foreach (var item in collection) Subtract(item, collection[item]);
+    }
     public bool AddRange(long amount, params T[] items)
     {
         if (items == null || items.Length == 0) return false;
-        foreach (T item in items)
-        {
-            Add(item, amount);
-        }
+        foreach (T item in items) Add(item, amount);
+        return true;
+    }
+    public bool SubtractRange(long amount, params T[] items)
+    {
+        if (items is null || items.Length == 0) return false;
+        foreach (T item in items) Subtract(item, amount);
         return true;
     }
     public bool AddRange(params T[] items) => AddRange(1, items);
+    public bool SubtractRange(params T[] items) => SubtractRange(1, items);
     public void Set(T item, long amount)
     {
         dictionary[item] = amount;
@@ -95,13 +109,14 @@ public class Tally<T> : IEnumerable<T> where T : notnull
     public long CountOf(T item) => dictionary.TryGetValue(item, out long count) ? count : 0;
     public bool Contains(T item, long minimumAmount = 1) => CountOf(item) >= minimumAmount;
     public bool Remove(T item) => dictionary.Remove(item);
-    public bool Remove(T item, long amount) => Add(item, -amount);
+    public bool Subtract(T item) => Subtract(item, 1);
+    public bool Subtract(T item, long amount) => Add(item, -amount);
     public long Max() => dictionary.Values.Max();
     public long Min() => dictionary.Values.Min();
     public bool Take(T item, long amount = 1)
     {
         if (!Contains(item, amount)) return false;
-        else Remove(item, amount);
+        else Subtract(item, amount);
         return true;
     }
     public void Clear() => dictionary.Clear();
@@ -123,9 +138,21 @@ public class Tally<T> : IEnumerable<T> where T : notnull
             Add(item, otherTally.CountOf(item));
         }
     }
+    public static Tally<T> operator +(Tally<T> a, Tally<T> b)
+    {
+        Tally<T> newTally = a.Clone();
+        newTally.AddRange(b);
+        return newTally;
+    }
+    public static Tally<T> operator -(Tally<T> a, Tally<T> b)
+    {
+        Tally<T> newTally = a.Clone();
+        newTally.SubtractRange(b);
+        return newTally;
+    }
     public Tally<T> Clone()
     {
-        Tally<T> copy = new Tally<T>();
+        Tally<T> copy = new(CanContainNegative);
         copy.MergeWith(this);
         return copy;
     }

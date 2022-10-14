@@ -26,7 +26,7 @@ namespace AOC
         }
         void SetupCircuit()
         {
-            string[] instructions = GetInputForDay(example: false);
+            string[] instructions = GetInputForDay();
             foreach (string instruction in instructions)
             {
                 Wire.Create(instruction);
@@ -94,12 +94,12 @@ namespace AOC
                 if (cached.HasValue) return cached.Value;
                 cached = mode switch
                 {
-                    "AND" =>    (ushort)(inputA.Value() & inputB.Value()),
-                    "OR" =>     (ushort)(inputA.Value() | inputB.Value()),
+                    "AND" => (ushort)(inputA.Value() & inputB.Value()),
+                    "OR" => (ushort)(inputA.Value() | inputB.Value()),
                     "RSHIFT" => (ushort)(inputA.Value() >> inputB.Value()),
                     "LSHIFT" => (ushort)(inputA.Value() << inputB.Value()),
-                    "NOT" =>    (ushort)~inputA.Value(),
-                    "TRANS" =>  inputA.Value(),
+                    "NOT" => (ushort)~inputA.Value(),
+                    "TRANS" => inputA.Value(),
                     _ => stored
                 };
                 Console.WriteLine($"Output from {name} found to be {cached.Value}");

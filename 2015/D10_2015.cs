@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,10 @@ namespace AOC
         }
         public override void PartB()
         {
+            Stopwatch sw = Stopwatch.StartNew();
             List<Section> sections = IterateSequence(50, GetInputForDay()[0]);
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedMilliseconds + " milliseconds");
             Submit(sections.Count * 2);
         }
         List<Section> IterateSequence(int times, string start)

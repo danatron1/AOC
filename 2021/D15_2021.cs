@@ -89,7 +89,7 @@ namespace AOC
             Point.MaximumY = 5 * input.GetLength(1) - 1;
             Point start = new Point(0, 0);
             Point end = new Point(Point.MaximumX, Point.MaximumY);
-            Stopwatch sw = new Stopwatch(); 
+            Stopwatch sw = new Stopwatch();
             sw.Start(); //spoiler alert; it takes about 10 seconds
             #endregion
             #region Create lists needed for Dijkstra
@@ -119,7 +119,7 @@ namespace AOC
             sw.Stop();
             Console.WriteLine($"Elapsed; {sw.ElapsedMilliseconds}ms");
             Copy(riskToReach[end]); //Copies puzzle answer to clipboard (fortunately correct)
-            
+
             int GetCostAt(Point point)
             { //gets the cost of a point outside of the original 100x100 grid for part 2
                 int baseCost = input[point.X % input.GetLength(0), point.Y % input.GetLength(1)];

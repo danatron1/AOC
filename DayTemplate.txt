@@ -4,17 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AOC
+namespace AOC.YYEARNUMBER;
+
+internal class DDAYNUMBER_YEARNUMBER : Day
 {
-    internal class DDAYNUMBER_YEARNUMBER : Day
+    public override void PartA()
     {
-        public override void PartA()
-        {
-            throw new NotImplementedException();
-        }
-        public override void PartB()
-        {
-            throw new NotImplementedException();
-        }
+        throw new NotImplementedException();
+    }
+    public override void PartB()
+    {
+        throw new NotImplementedException();
     }
 }

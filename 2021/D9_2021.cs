@@ -91,7 +91,7 @@ namespace AOC
             public bool fullyChecked;
             public XY(int x, int y)
             {
-                X = x; 
+                X = x;
                 Y = y;
                 fullyChecked = false;
             }

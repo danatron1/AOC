@@ -11,24 +11,22 @@ using System.Threading.Tasks;
 
 namespace AOC
 {
-    internal class D12_2015 : Day
+    internal class D12_2015 : Day<JToken>
     {
         public override void PartA()
         {
-            JToken a = GetInputForDayJson();
-            Submit(GetSum(a));
+            Submit(GetSum(InputLine));
         }
+        int GetSum(string s, string? skip = null) => GetSum(JToken.Parse(s), skip);
         int GetSum(JToken t, string? skip = null)
         {
             if (t.Type == JTokenType.Integer) return (int)t;
-            if (t.Children().Any(c => c.ToString() == skip)) return 0;
-            return t.Children().Sum(x => GetSum(x));
+            if (t is JObject o && o.Properties().Any(j => j.Value.ToString() == skip)) return 0;
+            return t.Children().Sum(x => GetSum(x, skip));
         }
-
         public override void PartB()
         {
-            JToken json = JToken.Parse("[1,{\"c\":\"red\",\"b\":2},3]");
-            Console.WriteLine(GetSum(json, "red"));
+            Submit(GetSum(InputLine, "red"));
         }
     }
 }
