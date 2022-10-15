@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -20,32 +21,24 @@ public static class WebsiteInteraction
             return sessionCookieCached;
         }
     }
-    public static async Task<string[]> DownloadAOCInput(int year, int day, bool example = false)
+    public static async Task<string[]> DownloadAOCInput<T>(DayBase<T> d)
     {
-        string pathFull = $@"{Utility.folderPath}\Inputs\{year}";
+        string pathFull = $@"{Utility.folderPath}\Inputs\{d.Year}";
         Directory.CreateDirectory(pathFull);
-        pathFull += $@"\{Day.NameFor(year, day)}_{(example ? "Example" : "Input")}.txt";
-        if (example)
+        pathFull += $@"\{d.Name}_{(d.useExampleInput ? "Example" : "Input")}.txt";
+        if (d.useExampleInput)
         {
             if (!File.Exists(pathFull))
             {
-                Console.WriteLine($"First time using example inputs for {Day.NameFor(year, day)}.\nCreated file at {pathFull}\nPaste example inputs here, leaving a blank line when done:");
-                List<string> examples = new();
-                while (true)
-                {
-                    string? testInput = Console.ReadLine();
-                    if (string.IsNullOrWhiteSpace(testInput)) break;
-                    examples.Add(testInput);
-                }
-                File.WriteAllLines(pathFull, examples.ToArray());
-                return examples.ToArray();
+                Console.WriteLine($"First time using example inputs for {d}.\nCreated file at {pathFull}");
+                return Utility.GetUserInputs(pathFull);
             }
             return File.ReadAllLines(pathFull);
         }
         if (!File.Exists(pathFull))
         {
-            Console.WriteLine($"Input file not downloaded for {Day.NameFor(year, day)}, fetching.");
-            string result = await GetContent($"/{year}/day/{day}/input");
+            Console.WriteLine($"Input file not downloaded for {d}, fetching.");
+            string result = await GetContent($"/{d.Year}/day/{d.Day}/input");
             await File.WriteAllTextAsync(pathFull, result);
         }
         return File.ReadAllLines(pathFull);

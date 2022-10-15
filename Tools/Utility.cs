@@ -75,4 +75,26 @@ public static class Utility
         }
         Console.WriteLine($"\nWait complete");
     }
+    public static string[] GetUserInputs(string? saveToFilePath = null)
+    {
+        Console.WriteLine("Please input below. Input blank line when you're done");
+        List<string> inputs = new();
+        while (true)
+        {
+            string? testInput = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(testInput)) break;
+            inputs.Add(testInput);
+        }
+        if (saveToFilePath != null) File.WriteAllLines(saveToFilePath, inputs.ToArray());
+        return inputs.ToArray();
+    }
+    public static string AsTime(this TimeSpan t)
+    { 
+        //I just want it to display more precise millisecond times as your time gets lower
+        if (t.TotalSeconds < 1) return $"{t:s'.'FFFFFF}s";
+        if (t.TotalSeconds < 10) return $"{t:s'.'FFFF}s";
+        if (t.TotalMinutes < 1) return $"{t:s'.'FF}s";
+        if (t.TotalHours < 1) return $"{t:m':'ss}";
+        return $"{t:h':'mm':'ss}";
+    }
 }

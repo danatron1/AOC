@@ -12,7 +12,7 @@ namespace AOC
         void MapHappiness()
         {
             TravellingSalesman.Reset();
-            foreach (string[] row in Input.Select(s => s.Trim('.')).PullColumns(0, 2, 3, 10).Cast<string[]>())
+            foreach (string[] row in Input.Select(s => s.Trim('.')).PullColumns(0, 2, 3, 10).Select(x => x.ToArray()))
             {
                 int happiness = row[1] == "lose" ? -int.Parse(row[2]) : int.Parse(row[2]);
                 TravellingSalesman.AddConnection(row[0], row[3], happiness, true);
