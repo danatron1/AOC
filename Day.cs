@@ -3,18 +3,22 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Intrinsics.Arm;
 using System.Text.RegularExpressions;
 using System.Windows;
 
 public abstract class DayBase<InputType>
 {
-    public int Day { get; private set; }
-    public int Year { get; private set; }
-    public string Name { get; private set; }
-    protected bool useExampleInput = false;
+    public int Day { get; init; }
+    public int Year { get; init; }
+    public string Name { get; init; }
+    public string NameSpace => $"AOC.Y{Year}";
+    public bool useExampleInput = false;
     public long? Minimum => GetPart() == 1 ? MinimumA : MinimumB;
     public long? Maximum => GetPart() == 1 ? MaximumA : MaximumB;
     private long? MinimumA, MinimumB, MaximumA, MaximumB;
+    public bool TrackingPerformance;
+    private TimeSpan wastedTime = new(0);
     public override string ToString() => Name;
     public DayBase()
     {
@@ -24,7 +28,9 @@ public abstract class DayBase<InputType>
         Name = NameFor(Year, Day);
         CacheAnswerLimits(); //min and max
         Directory.CreateDirectory($@"{Utility.folderPath}\Inputs\{Year}");
+        Setup();
     }
+    public virtual void Setup() { } 
     private string[]? _inputRaw;
     public string[] InputRaw
     {
@@ -50,6 +56,20 @@ public abstract class DayBase<InputType>
         {
             _input2D ??= GetInputForDay2D<InputType>();
             return _input2D;
+        }
+    }
+    private string[]? _extraInput;
+    private string _extraInputPath => $@"{Utility.folderPath}\Inputs\{Year}\{Name}_Extra.txt";
+    public string[] ExtraInput
+    {
+        get
+        {
+            if (_extraInput == null)
+            {
+                if (File.Exists(_extraInputPath)) _extraInput = File.ReadAllLines(_extraInputPath);
+                else _extraInput = Utility.GetUserInputs(_extraInputPath);
+            }
+            return _extraInput;
         }
     }
     public InputType InputLine => Input[0];
@@ -99,8 +119,12 @@ public abstract class DayBase<InputType>
             }
         }
     }
-    public virtual void Solve()
+    public virtual void Solve() => Solve(false); //need for legacy compatibility.
+    public virtual void Solve(bool trackPerformance)
     {
+        TrackingPerformance = trackPerformance;
+        TimeSpan part1Time, wastedTimeTotal = TimeSpan.Zero;
+        Stopwatch sw = Stopwatch.StartNew();
         try
         {
             PartASetup();
@@ -110,6 +134,10 @@ public abstract class DayBase<InputType>
         {
             Console.WriteLine($"Part A not yet solved.");
         }
+        part1Time = sw.Elapsed - wastedTime;
+        wastedTimeTotal += wastedTime;
+        wastedTime = TimeSpan.Zero;
+        sw.Restart();
         _input = null;
         useExampleInput = false;
         try
@@ -121,30 +149,34 @@ public abstract class DayBase<InputType>
         {
             Console.WriteLine($"Part B not yet solved.");
         }
+        sw.Stop();
+        if (TrackingPerformance)
+        {
+            Console.WriteLine($"Part A completed in {part1Time.AsTime()}");
+            Console.WriteLine($"Part B completed in {(sw.Elapsed - wastedTime).AsTime()}");
+            Console.WriteLine($"Time spent submitting/fetching inputs: {wastedTimeTotal.AsTime()}");
+        }
     }
     public virtual void PartASetup() { }
     public virtual void PartBSetup() { }
     public static void Solve(int year, int day, bool trackPerformance = false)
     {
+        Stopwatch sw = Stopwatch.StartNew();
         Type? type = Type.GetType($"AOC.Y{year}.{NameFor(year, day)}");
         type ??= Type.GetType($"AOC.{NameFor(year, day)}");
         type ??= Type.GetType($"AOC.D{day}_{year}");
         if (type == null)
         {
+            Console.WriteLine($"{NameFor(year, day)} doesn't appear to exist. Creating...");
             Create(year, day);
             return;
         }
         object? obj = Activator.CreateInstance(type);
-        MethodInfo? methodInfo = type.GetMethod("Solve");
+        MethodInfo? methodInfo = type.GetMethod("Solve", new Type[] { typeof(bool) });
         if (obj == null || methodInfo == null) return;
-        if (trackPerformance)
-        {
-            Stopwatch sw = Stopwatch.StartNew();
-            methodInfo.Invoke(obj, null);
-            sw.Stop();
-            Console.WriteLine($"Completed both parts in {sw.ElapsedMilliseconds} milliseconds\n");
-        }
-        else methodInfo.Invoke(obj, null);
+        methodInfo.Invoke(obj, new object[] { trackPerformance });
+        sw.Stop();
+        if (trackPerformance) Console.WriteLine($"Completed everything in {sw.Elapsed.AsTime()}\n");
     }
     public abstract void PartA();
     public abstract void PartB();
@@ -153,11 +185,16 @@ public abstract class DayBase<InputType>
         Console.WriteLine($"{item} (copied to clipboard)");
         Utility.Copy(item);
     }
-    public static string[] GetInputForAnyDay(int year, int day, bool example)
+    public static string[] GetInputForAnyDay<T>(DayBase<T> d)
     {
-        return WebsiteInteraction.DownloadAOCInput(year, day, example).Result;
+        Stopwatch sw = Stopwatch.StartNew();
+        string[] input = WebsiteInteraction.DownloadAOCInput(d).Result;
+        sw.Stop();
+        if (d.TrackingPerformance) Console.WriteLine($"Retrieved input for {d} in {sw.Elapsed.AsTime()}");
+        d.wastedTime += sw.Elapsed;
+        return input;
     }
-    public virtual string[] GetInputForDay() => GetInputForAnyDay(Year, Day, useExampleInput);
+    public virtual string[] GetInputForDay() => GetInputForAnyDay(this);
     public virtual T[] GetInputForDay<T>() => GetInputForDay().ConvertTo<T>();
     public virtual string[,] GetInputForDay2D(string split = "")
     {
@@ -231,9 +268,16 @@ public abstract class DayBase<InputType>
     }
     internal virtual string Submit(object answer)
     {
+        Stopwatch sw = Stopwatch.StartNew();
         int part = GetPart();
         string result = Submit(answer.ToString(), this, part);
-        Console.WriteLine($"(Puzzle {Name}, Part{(part==1?"A":"B")}) result: {result}\n");
+        Console.Write($"(Puzzle {Name}, Part{(part==1?"A":"B")}) result: ");
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write(result);
+        Console.ForegroundColor = ConsoleColor.Gray;
+        if (!TrackingPerformance) Console.WriteLine("\n");
+        else Console.WriteLine($"\nTime taken to submit answer: {sw.Elapsed.AsTime()}\n");
+        wastedTime += sw.Elapsed;
         return result;
     }
     private const int secondsBetweenSubmissions = 60;

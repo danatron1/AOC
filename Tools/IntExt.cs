@@ -19,4 +19,17 @@ public static class IntExt
         digits.Reverse();
         return digits.ToArray();
     }
+    public static IEnumerable<int> Factors(this int number)
+    {
+        int max = (int)Math.Sqrt(number);
+        for (int i = 1; i <= max; i++)
+        {
+            if (number % i == 0)
+            {
+                yield return i;
+                if (i == max && i * i == number) break;
+                yield return number / i;
+            }
+        }
+    }
 }
