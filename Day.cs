@@ -269,6 +269,11 @@ public abstract class DayBase<InputType>
     internal virtual string Submit(object answer)
     {
         Stopwatch sw = Stopwatch.StartNew();
+        if (answer is null)
+        {
+            Console.WriteLine("Cannot submit null");
+            return "Cannot submit null";
+        }
         int part = GetPart();
         string result = Submit(answer.ToString(), this, part);
         Console.Write($"(Puzzle {Name}, Part{(part==1?"A":"B")}) result: ");

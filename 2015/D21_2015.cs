@@ -30,8 +30,8 @@ internal class D21_2015 : Day
         weapons = shop.Where(t => t.Type == ItemType.Weapon).ToList();
         armour = shop.Where(t => t.Type == ItemType.Armor).ToList();
         rings = shop.Where(t => t.Type == ItemType.Ring).ToList();
-        rings.Add(ShopItem.Nothing); //allows you to buy only 1 ring with .Pairs()
-        armour.Add(ShopItem.Nothing); //allows you to go into battle naked
+        //rings.Add(ShopItem.Nothing); //allows you to buy only 1 ring with .Pairs()
+        //armour.Add(ShopItem.Nothing); //allows you to go into battle naked
     }
     IEnumerable<IEnumerable<ShopItem>> LegalLoadouts()
     {
@@ -96,7 +96,7 @@ internal class D21_2015 : Day
         }
         Submit(highest);
     }
-    class Character
+    internal class Character
     {
         public int HP;
         private int _baseHP;
@@ -174,7 +174,7 @@ internal class D21_2015 : Day
             UnequipAll();
         }
     }
-    class ShopItem
+    internal class ShopItem
     {
         public static ShopItem Nothing = new ShopItem("Nothing", 0, 0, 0, ItemType.Ring);
         public string Name { get; set; }
@@ -192,7 +192,7 @@ internal class D21_2015 : Day
         }
         public override string ToString() => Name;
     }
-    enum ItemType
+    internal enum ItemType
     {
         Weapon,
         Armor,
