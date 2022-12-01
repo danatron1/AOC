@@ -31,7 +31,7 @@ namespace AOC
                         break;
                 }
             }
-            Copy(horizontal * depth); //copy result to clipboard
+            Submit(horizontal * depth); //copy result to clipboard
         }
         public override void PartB()
         {
@@ -57,7 +57,7 @@ namespace AOC
                         break;
                 }
             }
-            Copy(horizontal * depth); //copy result to clipboard
+            Submit(horizontal * depth); //copy result to clipboard
         }
     }
 }

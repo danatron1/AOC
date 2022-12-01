@@ -25,7 +25,7 @@ namespace AOC
                 else floor--;
                 if (floor < 0) //if in basement
                 {
-                    Copy(i + 1); //off by 1 errors hahaha
+                    Submit(i + 1); //off by 1 errors hahaha
                     break;
                 }
             }

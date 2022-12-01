@@ -5,6 +5,7 @@
 
 # AOC Specific
 [Ii]nputs/
+[Ss]essionInfo.txt
 
 # User-specific files
 *.rsuser
