@@ -48,7 +48,6 @@ namespace AOC
                 }
             }
             if (doublePairs < 2) return false;
-            bool hasRun = false;
             for (int i = 2; i < password.Length; i++)
             {
                 if (password[i - 2] + 1 == password[i - 1] && password[i - 1] + 1 == password[i]) return true;

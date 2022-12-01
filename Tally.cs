@@ -24,6 +24,8 @@ public class Tally<T> : IEnumerable<T> where T : notnull
             if (!value) RemoveNegativeValues();
         }
     }
+    public T Maximum => dictionary.MaxBy(v => v.Value).Key;
+    public T Minimum => dictionary.MinBy(v => v.Value).Key;
     public long this[T item]
     {
         get
@@ -61,6 +63,7 @@ public class Tally<T> : IEnumerable<T> where T : notnull
         }
         return default(T);
     }
+    public bool Add(KeyValuePair<T, int> item) => Add(item.Key, item.Value);
     public bool Add(T item, long amount = 1)
     {
         if (amount == 0) return false;
@@ -74,16 +77,24 @@ public class Tally<T> : IEnumerable<T> where T : notnull
         if (collection is null) throw new ArgumentNullException();
         foreach (var item in collection) Add(item, collection[item]);
     }
-    public void SubtractRange(Tally<T> collection)
-    {
-        if (collection is null) throw new ArgumentNullException();
-        foreach (var item in collection) Subtract(item, collection[item]);
-    }
     public bool AddRange(long amount, params T[] items)
     {
         if (items == null || items.Length == 0) return false;
         foreach (T item in items) Add(item, amount);
         return true;
+    }
+    public bool AddRange(params T[] items) => AddRange(1, items);
+    public bool AddRange(IEnumerable<T> items) => AddRange(1, items.ToArray());
+    public bool AddRange(IEnumerable<KeyValuePair<T, int>> items)
+    {
+        if (items is null || items.Count() == 0) return false;
+        foreach (var item in items) Add(item);
+        return true;
+    }
+    public void SubtractRange(Tally<T> collection)
+    {
+        if (collection is null) throw new ArgumentNullException();
+        foreach (var item in collection) Subtract(item, collection[item]);
     }
     public bool SubtractRange(long amount, params T[] items)
     {
@@ -91,7 +102,6 @@ public class Tally<T> : IEnumerable<T> where T : notnull
         foreach (T item in items) Subtract(item, amount);
         return true;
     }
-    public bool AddRange(params T[] items) => AddRange(1, items);
     public bool SubtractRange(params T[] items) => SubtractRange(1, items);
     public void Set(T item, long amount)
     {
@@ -130,7 +140,8 @@ public class Tally<T> : IEnumerable<T> where T : notnull
     public List<T> GetValues() => dictionary.Keys.ToList();
     public Type GetItemType() => typeof(T);
     public HashSet<T> GetHashSet() => dictionary.Keys.ToHashSet();
-    public Dictionary<T, long> GetDictionary() => dictionary;
+    public Dictionary<T, long> ToDictionary() => dictionary;
+    public IEnumerable<KeyValuePair<T, long>> ToKeyValuePairs() => dictionary;
     public void MergeWith(Tally<T> otherTally)
     {
         foreach (T item in otherTally.GetValues())
@@ -158,10 +169,32 @@ public class Tally<T> : IEnumerable<T> where T : notnull
     }
     public IEnumerator<T> GetEnumerator()
     {
-        return dictionary.Keys.OrderBy(item => dictionary[item]).GetEnumerator();
+        return dictionary.Keys.OrderBy(item => dictionary[item]).Reverse().GetEnumerator();
     }
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
+    }
+}
+public static class TallyExtensions
+{
+    public static Tally<T> ToTally<T>(this IEnumerable<KeyValuePair<T, int>> source) where T : notnull
+    {
+        Tally<T> tally = new();
+        tally.AddRange(source);
+        return tally;
+    }
+    public static Tally<T> ToTally<T>(this IEnumerable<T> source) where T : notnull
+    {
+        Tally<T> tally = new();
+        tally.AddRange(source.ToArray());
+        return tally;
+    }
+
+    public static Tally<T> Frequencies<T>(this IEnumerable<T> collection) where T : notnull
+    {
+        Tally<T> t = new();
+        t.AddRange(collection);
+        return t;
     }
 }

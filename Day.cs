@@ -49,6 +49,16 @@ public abstract class DayBase<InputType>
             return _input;
         }
     }
+    private InputType[][]? _inputBlocks;
+    //InputBlocks are defined by inputs that are clusters of data separated by empty lines. For example, 2022 day 1.
+    public InputType[][] InputBlocks
+    {
+        get
+        {
+            _inputBlocks ??= GetInputForDayBlocks<InputType>();
+            return _inputBlocks;
+        }
+    }
     private InputType[,]? _input2D;
     public InputType[,] Input2D
     {
@@ -195,10 +205,26 @@ public abstract class DayBase<InputType>
         return input;
     }
     public virtual string[] GetInputForDay() => GetInputForAnyDay(this);
-    public virtual T[] GetInputForDay<T>() => GetInputForDay().ConvertTo<T>();
+    public virtual T[] GetInputForDay<T>() => GetInputForDay().ConvertTo<T>().ToArray();
+    public virtual T[][] GetInputForDayBlocks<T>(string splitLine = "")
+    {
+        List<T[]> results = new List<T[]>();
+        List<T> currentBlock = new List<T>();
+        string[] lines = InputRaw;
+        foreach (string line in lines)
+        {
+            if (line == splitLine)
+            {
+                results.Add(currentBlock.ToArray());
+                currentBlock.Clear();
+            }
+            else currentBlock.Add(line.ConvertTo<T>());
+        }
+        return results.ToArray();
+    }
     public virtual string[,] GetInputForDay2D(string split = "")
     {
-        string[] lines = GetInputForDay();
+        string[] lines = InputRaw;
         int max = lines.Max(l => l.Length);
         string[,] result = new string[max, lines.Length];
         string[] cells;

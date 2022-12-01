@@ -10,6 +10,19 @@ using System.Threading.Tasks;
 public static class WebsiteInteraction
 {
     public const string website = "https://adventofcode.com";
+    public const string myRepo = "https://github.com/danatron1/AOC";
+
+    public static string userAgentString = $"Mozilla/5.0 (+via {myRepo} by {myEmail})";
+
+    static string? myEmailCached;
+    public static string myEmail
+    {
+        get
+        {
+            myEmailCached ??= File.ReadAllText(@"C:\Users\Danatron1\source\repos\AOCAgentEmail.txt");
+            return myEmailCached;
+        }
+    }
     //Find your session cookie by going to adventofcode.com, pressing F12, going to the application tab, and copying the value of "session"
     static string? sessionCookieCached;
     public static string cookie
@@ -51,13 +64,14 @@ public static class WebsiteInteraction
     }
     internal static async Task<string> GetContent(string sitePath, params KeyValuePair<string, string>[] content)
     {
-        Console.WriteLine($"Connecting to {website}{sitePath}...");
+        Console.WriteLine($"Connecting to {website}{sitePath}..."); 
         FormUrlEncodedContent contentEncoded = new FormUrlEncodedContent(content);
         Uri uri = new Uri(website); //Uniform resource identifier
         CookieContainer cookies = new CookieContainer();
         cookies.Add(uri, new Cookie("session", cookie)); //login info
         using var handler = new HttpClientHandler() { CookieContainer = cookies };
         using var client = new HttpClient(handler) { BaseAddress = uri };
+        client.DefaultRequestHeaders.UserAgent.ParseAdd(userAgentString);
         using var response = await client.PostAsync(sitePath, contentEncoded);
         return response.Content.ReadAsStringAsync().Result;
     }
