@@ -312,7 +312,6 @@ internal class D22_2015 : Day
     internal class Character
     {
         int _baseHP;
-        int _baseDamage;
         public int HP;
         public int Damage;
         public int Defense;

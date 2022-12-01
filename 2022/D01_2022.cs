@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace AOC.Y2022
 {
-    internal class D01_2022 : Day
+    internal class D01_2022 : Day<int>
     {
         public override void PartA()
         {
-            throw new NotImplementedException();
+            Submit(InputBlocks.Select(x => x.Sum()).Max());
         }
         public override void PartB()
         {
-            throw new NotImplementedException();
+            Submit(InputBlocks.Select(x => x.Sum()).OrderDescending().Take(3).Sum());
         }
     }
 }

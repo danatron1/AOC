@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -43,8 +44,7 @@ public static class Utility
         return result;
     }
 
-    //WHEN .NET 7 IS OUT UPDATE THIS!!!
-    //IPARSABLE WOOOOOO
+    //Old GetParse method - kept just in case.
     public static Func<string, T> GetParse<T>()
     {
         var methodInfo = typeof(T).GetMethod("Parse", BindingFlags.Public | BindingFlags.Static, new[] { typeof(string) });
@@ -53,7 +53,7 @@ public static class Utility
             throw new Exception("Type does not have a parse method.");
         }
         return (Func<string, T>)methodInfo.CreateDelegate(Expression.GetFuncType(typeof(string), typeof(T)));
-    }
+    }   /**/
     public static void RefSwap<T>(ref T a, ref T b)
     {
         (a, b) = (b, a);
@@ -96,5 +96,10 @@ public static class Utility
         if (t.TotalMinutes < 1) return $"{t:s'.'FF}s";
         if (t.TotalHours < 1) return $"{t:m':'ss}";
         return $"{t:h':'mm':'ss}";
+    }
+    public static IEnumerable<long> CountForever(long startingAt = 0, long stepsOf = 1)
+    {
+        yield return startingAt;
+        while (true) yield return startingAt += stepsOf;
     }
 }

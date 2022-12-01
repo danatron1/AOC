@@ -58,7 +58,7 @@ public static class StringExt
     {
         if (separators is null || separators.Length == 0) separators = new char[] { ',' };
         string[] normalSplit = line.Split(separators, StringSplitOptions.TrimEntries);
-        return normalSplit.ConvertTo<T>();
+        return normalSplit.ConvertTo<T>().ToArray();
     }
     /// <summary>
     /// Same as .Split, except you can also convert the results to another type.
@@ -71,7 +71,7 @@ public static class StringExt
     {
         if (separators is null || separators.Length == 0) separators = new string[] { "," };
         string[] normalSplit = line.Split(separators, StringSplitOptions.TrimEntries);
-        return normalSplit.ConvertTo<T>();
+        return normalSplit.ConvertTo<T>().ToArray();
     }
     public static string Repeat(this string line, int times)
     {
@@ -117,6 +117,7 @@ public static class StringExt
         while (s.TryExtractNumberLocation(out int start, out int end))
         {
             numbers.Add(double.Parse(s[start..end]));
+            if (end >= s.Length) break;
             s = s[(end + 1)..];
         }
         return numbers.ToArray();

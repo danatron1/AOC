@@ -10,10 +10,15 @@ internal class D25_2015 : Day
 {
     public override void PartA()
     {
-        throw new NotImplementedException();
+        int[] rowAndCol = InputLine.ExtractNumbers().Select(s => (int)s).ToArray();
+        int index = Enumerable.Range(1, rowAndCol[0] - 1 + rowAndCol[1]).Sum() - rowAndCol[0];
+        long startValue = 20151125;
+        Submit(startValue.RepeatAction(NextValue, index));
     }
     public override void PartB()
     {
-        throw new NotImplementedException();
+        Console.WriteLine("Started 06/10/2022");
+        Console.WriteLine("Beaten on 18/10/2022. Only a little late :)");
     }
+    long NextValue(long last) => last * 252533 % 33554393;
 }

@@ -10,11 +10,9 @@ namespace AOC
     {
         public override void PartA()
         {
-            string[] input = GetInputForDay();
             int twoOfs = 0;
             int threeOfs = 0;
-
-            foreach (var item in input)
+            foreach (var item in Input)
             {
                 if (item.Any(c => item.FrequencyOf(c) == 2)) twoOfs++;
                 if (item.Any(c => item.FrequencyOf(c) == 3)) threeOfs++;

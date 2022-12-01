@@ -39,9 +39,21 @@ public static class ArrayExt
         var (Offset, Length) = r.GetOffsetAndLength(array.Length);
         Array.Reverse(array, Offset, Length);
     }
-    public static T[] ConvertTo<T>(this IEnumerable<string> list)
+    public static IEnumerable<T> ParseAs<T>(this IEnumerable<string> list, IFormatProvider? parseFormat = null) where T : IParsable<T>
     {
-        if (typeof(string) == typeof(T) && list is T[] t) return t;
+        if (typeof(string) == typeof(T) && list is IEnumerable<T> t) return t;
+        return list.Select(s => T.Parse(s, parseFormat));
+    }
+    public static T ConvertTo<T>(this string item)
+    {
+        if (typeof(string) == typeof(T) && item is T t) return t;
+        Func<string, T> parse = Utility.GetParse<T>();
+        return parse(item);
+    }
+    public static IEnumerable<T> ConvertTo<T>(this IEnumerable<string> list)
+    {
+        if (typeof(string) == typeof(T) && list is IEnumerable<T> t) return t;
+        //if (T is IParsable<T> tt) return tt.ParseAs<T>();
         Func<string, T> parse = Utility.GetParse<T>();
         return list.Select(parse).ToArray();
     }
@@ -316,6 +328,26 @@ public static class ArrayExt
         if (enumerator.Current is IEnumerable e) return 1 + e.NestedDepth();
         return 1;
     }
+    public static T[][] ToJagged<T>(this T[,] array2D)
+    {
+        int rows = array2D.GetUpperBound(0);
+        int columns = array2D.GetUpperBound(1);
+        T[][] jaggedArray = new T[rows + 1][];
+        for (int i = array2D.GetLowerBound(0); i <= rows; i++)
+        {
+            jaggedArray[i] = new T[columns + 1];
+
+            for (int j = array2D.GetLowerBound(1); j <= columns; j++)
+            {
+                jaggedArray[i][j] = array2D[i, j];
+            }
+        }
+        return jaggedArray;
+    }
+    public static string ToContentString<T>(this T[,] array2D, string separator = ", ")
+    {
+        return array2D.ToJagged().ToContentString(separator);
+    }
     public static string ToContentString(this IEnumerable array, string separator = ", ")
     {
         return array.ToContentString(array.NestedDepth(), array.NestedDepth(), separator);
@@ -343,6 +375,8 @@ public static class ArrayExt
         return content + "}";
     }
     public static int Mul(this IEnumerable<int> array) => array.Aggregate(1, (a, b) => a * b);
+    public static long Mul(this IEnumerable<long> array) => array.Aggregate<long, long>(1, (a, b) => a * b);
+    public static long MulAsLong(this IEnumerable<int> array) => array.Select(i => (long)i).Mul();
     public static IEnumerable<T> Shortest<T>(this IEnumerable<IEnumerable<T>> array) => array.MinBy(x => x.Count());
     public static IEnumerable<T> Longest<T>(this IEnumerable<IEnumerable<T>> array) => array.MaxBy(x => x.Count());
     public static IEnumerable<int> Counts<T>(this IEnumerable<IEnumerable<T>> array) => array.Select(x => x.Count());
@@ -364,20 +398,103 @@ public static class ArrayExt
     }
     public static TResult[,] Select2D<TSource, TResult>(this TSource[,] array, Func<TSource, TResult> predicate)
     {
-        TResult[,] result = new TResult[array.GetLength(0), array.GetLength(1)]; 
-        for (int x = 0; x < array.GetLength(0); x++)
+        TResult[,] result = new TResult[array.GetLength(0), array.GetLength(1)];
+        for (int x = array.GetLowerBound(0); x < array.GetUpperBound(0); x++)
         {
-            for (int y = 0; y < array.GetLength(1); y++)
+            for (int y = array.GetLowerBound(1); y < array.GetUpperBound(1); y++)
             {
-                result[x,y] = predicate.Invoke(array[x, y]);
+                result[x, y] = predicate.Invoke(array[x, y]);
             }
         }
         return result;
     }
-    public static Tally<T> ToTally<T>(this IEnumerable<T> source) where T : notnull
+    public static IEnumerable<T> Flatten<T>(this T[,] array)
     {
-        Tally<T> tally = new();
-        tally.AddRange(source.ToArray());
-        return tally;
+        for (int x = 0; x < array.GetLength(0); x++)
+        {
+            for (int y = 0; y < array.GetLength(1); y++)
+            {
+                yield return array[x, y];
+            }
+        }
+    }
+    public static IEnumerable<T> AggregateSteps<T>(this IEnumerable<T> source, Func<T, T, T> func)
+    {
+        using IEnumerator<T> e = source.GetEnumerator();
+        if (!e.MoveNext()) throw new IndexOutOfRangeException("No elements");
+        T result = e.Current;
+        yield return result;
+        while (e.MoveNext())
+        {
+            result = func(result, e.Current);
+            yield return result;
+        }
+    }
+    public static IEnumerable<TSeed> AggregateSteps<T, TSeed>(this IEnumerable<T> source, TSeed seed, Func<TSeed, T, TSeed> func)
+    {
+        using IEnumerator<T> e = source.GetEnumerator();
+        if (!e.MoveNext()) throw new IndexOutOfRangeException("No elements");
+        TSeed result = seed;
+        foreach (var item in source)
+        {
+            seed = func(seed, item);
+            yield return seed;
+        }
+    }
+    public static IEnumerable<IGrouping<T, T>> Group<T>(this IEnumerable<T> source) => source.GroupBy(x => x);
+    public static IEnumerable<T> Duplicates<T>(this IEnumerable<T> source)
+    {
+        HashSet<T> seen = new();
+        foreach (var item in source)
+        {
+            if (seen.Contains(item)) yield return item;
+            seen.Add(item);
+        }
+    }
+    public static IEnumerable<T> Loop<T>(this IEnumerable<T> source, int times)
+    {
+        for (int i = 0; i < times; i++)
+        {
+            foreach (var item in source)
+            {
+                yield return item;
+            }
+        }
+    }
+    public static IEnumerable<T> LoopForever<T>(this IEnumerable<T> source)
+    {
+        while (true)
+        {
+            foreach (var item in source)
+            {
+                yield return item;
+            }
+        }
+    }
+    public static IEnumerable<T> Without<T>(this IEnumerable<T> source, T unwanted) where T : notnull
+    {
+        return source.Where(s => !s.Equals(unwanted));
+    }
+
+    //future update; work with any INumber
+    public static void AddToRange(this int[] source, Range range, int amount = 1)
+    {
+        (int Offset, int Length) = range.GetOffsetAndLength(source.Length);
+        for (int i = Offset; i < Offset + Length; i++)
+        {
+            source[i] += amount;
+        }
+    }
+    public static void AddToRange(this int[,] source, Range Yrange, Range Xrange, int amount = 1)
+    {
+        (int XOffset, int XLength) = Xrange.GetOffsetAndLength(source.Length);
+        (int YOffset, int YLength) = Yrange.GetOffsetAndLength(source.Length);
+        for (int x = XOffset; x < XOffset + XLength; x++)
+        {
+            for (int y = YOffset; y < YOffset + YLength; y++)
+            {
+                source[x, y] += amount;
+            }
+        }
     }
 }
