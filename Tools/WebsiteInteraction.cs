@@ -12,7 +12,7 @@ public static class WebsiteInteraction
     public const string website = "https://adventofcode.com";
     public const string myRepo = "https://github.com/danatron1/AOC";
 
-    public static string userAgentString = $"Mozilla/5.0 (+via {myRepo} by {myEmail})";
+    public static string userAgentString = $".NET/{Environment.Version} (+via {myRepo} by {myEmail})";
 
     static string? myEmailCached;
     public static string myEmail
