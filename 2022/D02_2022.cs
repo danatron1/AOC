@@ -22,7 +22,7 @@ namespace AOC.Y2022
             //
             //I then add on my score; 1 for rock, 2 for paper, 3 for scissors. This is just the last character minus W, 
             //which effectively counts the number of characters after W that that letter is, which gives me the score.
-            Submit(Input.Select(x => (2 + x[2] - x[0]) % 3 * 3 + x[2] - 'W').Sum());
+            Submit(Input.Sum(x => (2 + x[2] - x[0]) % 3 * 3 + x[2] - 'W'));
         }
         public override void PartB()
         {
@@ -35,7 +35,7 @@ namespace AOC.Y2022
             //One counts up (ABC) while the other counts down (ZYX) add them to cancel that out, add 2 for the exact same reason as above,
             //Then finally modulo 3 to get 0, 1, or 2 (corresponding to whether I picked rock, paper, or scissors).
             //The scores are actually 1, 2, or 3, so the final step is to just add 1 to that.
-            Submit(Input.Select(x => (x[2]-'X')*3 + (x[2] + x[0] + 2) % 3 + 1).Sum());
+            Submit(Input.Sum(x => (x[2] - 'X') * 3 + (x[2] + x[0] + 2) % 3 + 1));
         }
     }
 }
