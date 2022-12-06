@@ -215,11 +215,13 @@ public abstract class DayBase<InputType>
         {
             if (line == splitLine)
             {
+                if (currentBlock.Count == 0) continue;
                 results.Add(currentBlock.ToArray());
                 currentBlock.Clear();
             }
             else currentBlock.Add(line.ConvertTo<T>());
         }
+        if (currentBlock.Count > 0) results.Add(currentBlock.ToArray());
         return results.ToArray();
     }
     public virtual string[,] GetInputForDay2D(string split = "")
