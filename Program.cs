@@ -1,1 +1,1 @@
-﻿Day.Solve(2022, 3);
+﻿Day.Solve(2022, 6);

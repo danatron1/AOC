@@ -8,13 +8,21 @@ namespace AOC.Y2022
 {
     internal class D06_2022 : Day
     {
+        int PacketDetector(int length)
+        {
+            for (int i = 0; i <= InputLine.Length - length; i++)
+            {
+                if (InputLine.Skip(i).Take(length).Distinct().Count() == length) return i + length;
+            }
+            return -1;
+        }
         public override void PartA()
         {
-            throw new NotImplementedException();
+            Submit(PacketDetector(4));
         }
         public override void PartB()
         {
-            throw new NotImplementedException();
+            Submit(PacketDetector(14));
         }
     }
 }

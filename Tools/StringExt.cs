@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -98,30 +100,32 @@ public static class StringExt
         if (start > 0 && s[start - 1] == '-') start--;
         return true;
     }
-    public static bool TryExtractNumber(this string s, out double number)
+    public static bool TryExtractNumber<T>(this string s, [NotNullWhen(true)] out T? number) where T : INumber<T>
     {
-        number = 0;
+        number = default;
         if (!s.TryExtractNumberLocation(out int start, out int end)) return false;
-        number = double.Parse(s[start..end]);
+        number = T.Parse(s.AsSpan()[start..end], null);
         return true;
     }
-    public static double ExtractNumber(this string s)
+    public static T ExtractNumber<T>(this string s) where T : INumber<T>
     {
         s.TryExtractNumberLocation(out int start, out int end);
         if (s[end] == '.') while (++end < s.Length && char.IsDigit(s[end])) ;
-        return (start > 0 && s[start - 1] == '-') ? -double.Parse(s[start..end]) : double.Parse(s[start..end]);
+        return (start > 0 && s[start - 1] == '-') ? -T.Parse(s.AsSpan()[start..end], null) : T.Parse(s.AsSpan()[start..end], null);
     }
-    public static double[] ExtractNumbers(this string s)
+    public static double[] ExtractNumbers(this string s) => s.ExtractNumbers<double>();
+    public static T[] ExtractNumbers<T>(this string s) where T : INumber<T>
     {
-        List<double> numbers = new();
+        List<T> numbers = new();
         while (s.TryExtractNumberLocation(out int start, out int end))
         {
-            numbers.Add(double.Parse(s[start..end]));
+            numbers.Add(T.Parse(s.AsSpan()[start..end], null));
             if (end >= s.Length) break;
             s = s[(end + 1)..];
         }
         return numbers.ToArray();
     }
+    public static bool ContainsOrIsContainedBy(this string s1, string s2) => s1.Contains(s2) || s2.Contains(s1);
 
     #region Pull Columns
     public static IEnumerable<string> PullColumns(this string sentence, params int[] relevantColumnIndexes)

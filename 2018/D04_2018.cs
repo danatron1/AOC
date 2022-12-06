@@ -24,7 +24,7 @@ internal class D04_2018 : Day
         {
             if (guardTimes[i].message.Contains("begins shift"))
             {
-                int guardID = (int)guardTimes[i].message.ExtractNumber();
+                int guardID = guardTimes[i].message.ExtractNumber<int>();
                 currentGuard = guards.Where(i => i.ID == guardID).FirstOrDefault() ?? new(guardID);
                 guards.Add(currentGuard);
             }

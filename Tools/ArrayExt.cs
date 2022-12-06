@@ -497,4 +497,11 @@ public static class ArrayExt
             }
         }
     }
+    //for linked lists
+    public static LinkedListNode<T> GetNodeAt<T>(this LinkedList<T> list, int position)
+    {
+        LinkedListNode<T> mark = list.First;
+        while (position-- > 0) mark = mark.Next;
+        return mark;
+    }
 }
