@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +10,13 @@ namespace AOC.Items;
 
 public struct Point2D : IEquatable<Point2D>, IEqualityComparer<Point2D>
 {
+    public enum Direction
+    {
+        North,
+        East,
+        South,
+        West
+    }
     public int X { get; init; }
     public int Y { get; init; }
     public Point2D(int x, int y)
@@ -32,4 +40,15 @@ public struct Point2D : IEquatable<Point2D>, IEqualityComparer<Point2D>
         }
     }
     public override string ToString() => $"({X}, {Y})";
+    internal Point2D NextIn(Direction dir)
+    {
+        return dir switch
+        {
+            Direction.North => new Point2D(X, Y - 1),
+            Direction.East => new Point2D(X + 1, Y),
+            Direction.South => new Point2D(X, Y + 1),
+            Direction.West => new Point2D(X - 1, Y),
+            _ => new Point2D(X, Y),
+        };
+    }
 }

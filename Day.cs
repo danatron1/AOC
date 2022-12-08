@@ -60,12 +60,21 @@ public abstract class DayBase<InputType>
         }
     }
     private InputType[,]? _input2D;
+    private InputType[][]? _input2DJagged;
     public InputType[,] Input2D
     {
         get
         {
             _input2D ??= GetInputForDay2D<InputType>();
             return _input2D;
+        }
+    }
+    public InputType[][] Input2DJagged
+    {
+        get
+        {
+            _input2DJagged ??= GetInputForDay2D<InputType>().ToJagged();
+            return _input2DJagged;
         }
     }
     private string[]? _extraInput;
@@ -326,7 +335,6 @@ public abstract class DayBase<InputType>
             Console.WriteLine("Are you sure you want to submit this answer? (y/n)");
             if ((Console.ReadLine()?.ToLower()[0]) != 'y') return "Declined to submit";
         }
-        long? minimum = null, maximum = null;
         #region Load log
         string logPath = @$"{Utility.folderPath}\Logs\{day.Year}";
         string path = $"{logPath}\\{day}_LOG.txt";
@@ -362,13 +370,13 @@ public abstract class DayBase<InputType>
                 duplicate = lastLog[2];
             }
             //calculate range
-            if (lastLog[2] == "Incorrect low" && long.TryParse(lastLog[1], out newLimit) && (!minimum.HasValue || newLimit > minimum))
+            if (lastLog[2] == "Incorrect low" && long.TryParse(lastLog[1], out newLimit))
             {
-                minimum = newLimit;
+                day.ImproveMinMaxGuesses(newLimit, null, part);
             }
-            else if (lastLog[2] == "Incorrect high" && long.TryParse(lastLog[1], out newLimit) && (!maximum.HasValue || newLimit < maximum))
+            else if (lastLog[2] == "Incorrect high" && long.TryParse(lastLog[1], out newLimit))
             {
-                maximum = newLimit;
+                day.ImproveMinMaxGuesses(null, newLimit, part);
             }
         }
         if (!string.IsNullOrWhiteSpace(duplicate))
@@ -378,12 +386,12 @@ public abstract class DayBase<InputType>
             return "Duplicate answer";
         }
         //don't submit answers that are out of range
-        if (minimum.HasValue && long.Parse(answer) < minimum)
+        if (day.Minimum.HasValue && long.Parse(answer) < day.Minimum)
         {
             Console.WriteLine($"Didn't submit {answer} because we know it's {day.RangeString()}");
             return "Too low";
         }
-        if (maximum.HasValue && long.Parse(answer) > maximum)
+        if (day.Maximum.HasValue && long.Parse(answer) > day.Maximum)
         {
             Console.WriteLine($"Didn't submit {answer} because we know it's {day.RangeString()}");
             return "Too high";
@@ -431,15 +439,15 @@ public abstract class DayBase<InputType>
                 if (result.Contains("answer is too low"))
                 {
                     lowhigh = "low";
-                    minimum = long.Parse(answer);
+                    day.ImproveMinMaxGuesses(long.Parse(answer), null, part);
                 }
                 else if (result.Contains("answer is too high"))
                 {
                     lowhigh = "high";
-                    maximum = long.Parse(answer);
+                    day.ImproveMinMaxGuesses(null, long.Parse(answer), part);
                 }
 
-                if (lowhigh.Length == 0 && (minimum.HasValue || maximum.HasValue))
+                if (lowhigh.Length == 0 && (day.Minimum.HasValue || day.Maximum.HasValue))
                 {
                     Console.WriteLine("You're no longer being told whether your answer is too high or low.");
                     Console.WriteLine($"We know the answer is {day.RangeString()}");
@@ -506,6 +514,19 @@ public abstract class DayBase<InputType>
         else if (Maximum.HasValue) rangeMessage = $"below {Maximum}";
         return rangeMessage;
     }
+    void ImproveMinMaxGuesses(long? newMin, long? newMax, int part)
+    {
+        if (part == 1)
+        {
+            if (!MinimumA.HasValue || (newMin.HasValue && newMin > MinimumA)) MinimumA = newMin;
+            if (!MaximumA.HasValue || (newMax.HasValue && newMax > MaximumA)) MaximumA = newMax;
+        }
+        else if (part == 2)
+        {
+            if (!MinimumB.HasValue || (newMin.HasValue && newMin > MinimumB)) MinimumB = newMin;
+            if (!MaximumB.HasValue || (newMax.HasValue && newMax > MaximumB)) MaximumB = newMax;
+        }
+    }
     internal int GetPart()
     {
         StackFrame[] frames = new StackTrace().GetFrames();
@@ -515,7 +536,6 @@ public abstract class DayBase<InputType>
             if (frame.GetMethod().Name == "PartB") return 2;
         }
         throw new Exception("Could not determine calling part");
-        return -1;
     }
 }
 public abstract class Day : DayBase<string>
