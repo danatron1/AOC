@@ -17,7 +17,7 @@ internal class GOL
     {
         this.born = born;
         this.stay = stay;
-        grid.defaultValue = false;
+        grid.DefaultValue = false;
         grid.printedRepresentation.Add(true, "#");
         grid.printedRepresentation.Add(false, ".");
     }
