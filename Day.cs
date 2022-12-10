@@ -182,18 +182,20 @@ public abstract class DayBase<InputType>
     {
         Stopwatch sw = Stopwatch.StartNew();
         Type? type = Type.GetType($"AOC.Y{year}.{NameFor(year, day)}");
-        type ??= Type.GetType($"AOC.{NameFor(year, day)}");
-        type ??= Type.GetType($"AOC.D{day}_{year}");
+        type ??= Type.GetType($"AOC.{NameFor(year, day)}"); //for legacy compatibility
+        type ??= Type.GetType($"AOC.D{day}_{year}"); //for legacy compatibility
         if (type == null)
         {
             Console.WriteLine($"{NameFor(year, day)} doesn't appear to exist. Creating...");
             Create(year, day);
+            Console.WriteLine($"Cannot continue with code execution as code must be recompiled to include the newly created file.\nRun the program again.");
             return;
         }
-        object? obj = Activator.CreateInstance(type);
-        MethodInfo? methodInfo = type.GetMethod("Solve", new Type[] { typeof(bool) });
-        if (obj == null || methodInfo == null) return;
-        methodInfo.Invoke(obj, new object[] { trackPerformance });
+        Day obj = Activator.CreateInstance(type) as Day;
+        obj.Solve(trackPerformance);
+        //MethodInfo? methodInfo = type.GetMethod("Solve", new Type[] { typeof(bool) });
+        //if (obj == null || methodInfo == null) return;
+        //methodInfo.Invoke(obj, new object[] { trackPerformance });
         sw.Stop();
         if (trackPerformance) Console.WriteLine($"Completed everything in {sw.Elapsed.AsTime()}\n");
     }
