@@ -32,6 +32,12 @@ public class Grid<T> : ICloneable, IEnumerable<KeyValuePair<Point2D, T>> where T
     {
         SetPoints(input2d);
     }
+    public Grid(T value, IEnumerable<Point2D> input2d)
+    {
+        SetPoints(value, input2d);
+    }
+
+
     public Grid(T[,] input2d, T defaultValue) : this(defaultValue)
     {
         SetPoints(input2d);
@@ -64,20 +70,33 @@ public class Grid<T> : ICloneable, IEnumerable<KeyValuePair<Point2D, T>> where T
     public T[,] To2DArray()
     {
         var limits = GetLimitsOrExtremes();
-        T[,] array = new T[limits.maxX, limits.maxY];
+        T[,] array = new T[limits.maxX - limits.minX, limits.maxY - limits.minY];
         foreach (Point2D item in GetPoints())
         {
-            array[item.X, item.Y] = GetPoint(item);
+            array[item.X - limits.minX, limits.maxY - 1 - item.Y] = GetPoint(item);
         }
         return array;
     }
+    public void SetPoints(T value, IEnumerable<Point2D> input2d) => SetPoints(value, input2d.ToArray());
+    public void SetPoints(T value, params Point2D[] points)
+    {
+        foreach (Point2D point in points)
+        {
+            SetPoint(point, value);
+        }
+    }
     public void SetPoints(T[,] input)
     {
-        for (int y = 0; y < input.GetLength(1); y++)
+        //made consistent so that bottom left = 0, 0
+        //bottom right = x, 0
+        //top left = 0, x
+        //top right = x, x
+        int rowNum = input.GetLength(1);
+        for (int y = 0; y < rowNum; y++)
         {
             for (int x = 0; x < input.GetLength(0); x++)
             {
-                SetPoint((x, y), input[x, y]);
+                SetPoint((x, rowNum - 1 - y), input[x, y]);
             }
         }
     }
@@ -94,16 +113,18 @@ public class Grid<T> : ICloneable, IEnumerable<KeyValuePair<Point2D, T>> where T
     public void PrintBoard()
     {
         var limits = GetLimitsOrExtremes();
-        for (int y = limits.minY; y < limits.maxY; y++)
+        string line;
+        for (int y = limits.maxY - 1; y >= limits.minY; y--)
         {
+            line = "";
             for (int x = limits.minX; x < limits.maxX; x++)
             {
                 T? point = GetPoint((x, y));
-                if (point is null) Console.Write("NULL");
-                else if (printedRepresentation.TryGetValue(point, out string? rep)) Console.Write(rep);
-                else Console.Write(point);
+                if (point is null) line += "NULL";
+                else if (printedRepresentation.TryGetValue(point, out string? rep)) line += rep;
+                else line += point;
             }
-            Console.WriteLine();
+            Console.WriteLine(line);
         }
     }
     public (int maxX, int maxY, int minX, int minY) GetLimitsOrExtremes()

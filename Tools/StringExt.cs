@@ -93,7 +93,8 @@ public static class StringExt
         end = start;
         if (start == -1) return false;
         //find end of numbers
-        while (++end < s.Length && char.IsDigit(s[end])) ;
+        while (++end < s.Length && char.IsDigit(s[end]));
+
         //if there's a decimal point, include it and continue until no more numbers
         if (end < s.Length && s[end] == '.') while (++end < s.Length && char.IsDigit(s[end])) ;
         //include - sign if there is one.
@@ -110,7 +111,7 @@ public static class StringExt
     public static T ExtractNumber<T>(this string s) where T : INumber<T>
     {
         s.TryExtractNumberLocation(out int start, out int end);
-        if (s[end] == '.') while (++end < s.Length && char.IsDigit(s[end])) ;
+        //if (s[end-1] == '.') while (++end < s.Length && char.IsDigit(s[end])) ;
         return (start > 0 && s[start - 1] == '-') ? -T.Parse(s.AsSpan()[start..end], null) : T.Parse(s.AsSpan()[start..end], null);
     }
     public static double[] ExtractNumbers(this string s) => s.ExtractNumbers<double>();

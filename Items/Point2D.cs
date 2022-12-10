@@ -19,6 +19,7 @@ public struct Point2D : IEquatable<Point2D>, IEqualityComparer<Point2D>
     }
     public int X { get; init; }
     public int Y { get; init; }
+    public Point2D() : this(0, 0) { }
     public Point2D(int x, int y)
     {
         X = x;
@@ -44,11 +45,28 @@ public struct Point2D : IEquatable<Point2D>, IEqualityComparer<Point2D>
     {
         return dir switch
         {
-            Direction.North => new Point2D(X, Y - 1),
+            Direction.North => new Point2D(X, Y + 1),
             Direction.East => new Point2D(X + 1, Y),
-            Direction.South => new Point2D(X, Y + 1),
+            Direction.South => new Point2D(X, Y - 1),
             Direction.West => new Point2D(X - 1, Y),
             _ => new Point2D(X, Y),
         };
+    }
+
+    internal static Direction DirectionFromChar(char c)
+    {
+        c = char.ToUpper(c);
+        switch(c)
+        {
+            case 'U': //up
+            case 'N': return Direction.North;
+            case 'R': //right
+            case 'E': return Direction.East;
+            case 'D': //down
+            case 'S': return Direction.South;
+            case 'L': //left
+            case 'W': return Direction.West;
+        }
+        throw new NotImplementedException($"The case for char {c} is not handled.");
     }
 }
