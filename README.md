@@ -12,7 +12,7 @@ All requests are made with the `User-Agent` string: ".NET/[version] (+via github
 
 Input is only extracted once, and cached for subsequent uses. 
 Instances of corruption are so rare that I manually delete the locally saved input, triggering a re-download. 
-Inputs are not included in this repo (see .gitignore)
+Inputs are not included in this repo (see .gitignore) as per [input sharing guidelines](https://www.reddit.com/r/adventofcode/wiki/faqs/copyright/inputs/).
 
 Submissions are also automated, with each submission being logged. A submission request to the website is only made if:
 * The answer is NOT null, empty string, white space, 0, or -1.
@@ -53,7 +53,7 @@ You can change the type of the input by adding a <Type Argument> to the inherite
 e.g. changing `internal class D10_2022 : Day` to `internal class D10_2022 : Day<int>`. 
 This will convert each row of the input to an int. `Input` will now be of type `int[]`. 
 This assumes that the rows are able to be converted; an error will be thrown otherwise. 
-If your puzzle was to simply sum the values, then changing `Day` to `Day<int>` would allow you to simply use `Input.Sum()` to get the answer.
+If your puzzle was ([theoretically](https://adventofcode.com/2018/day/1)) to simply sum the values, then changing `Day` to `Day<int>` would allow you to simply use `Input.Sum()` to get the answer.
 
 You can always access the original input with `InputRaw`, which will always be a `string[]`.
 
