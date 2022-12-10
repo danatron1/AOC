@@ -33,4 +33,5 @@ public static class IntExt
             }
         }
     }
+    public static bool WithinRangeOf(this int x, int range, int value) => value - range <= x && x <= value + range;
 }

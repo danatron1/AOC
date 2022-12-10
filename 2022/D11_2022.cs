@@ -4,17 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AOC.Y2022
+namespace AOC.Y2022;
+
+internal class D11_2022 : Day
 {
-    internal class D11_2022 : Day
+    public override void PartA()
     {
-        public override void PartA()
-        {
-            throw new NotImplementedException();
-        }
-        public override void PartB()
-        {
-            throw new NotImplementedException();
-        }
+        throw new NotImplementedException();
+    }
+    public override void PartB()
+    {
+        throw new NotImplementedException();
     }
 }
