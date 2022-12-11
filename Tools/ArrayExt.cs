@@ -504,4 +504,6 @@ public static class ArrayExt
         while (position-- > 0) mark = mark.Next;
         return mark;
     }
+    public static IEnumerable<T> Top<T>(this IEnumerable<T> source, int count) => source.OrderDescending().Take(count);
+    public static IEnumerable<T> Bottom<T>(this IEnumerable<T> source, int count) => source.Order().Take(count);
 }

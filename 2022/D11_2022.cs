@@ -57,8 +57,8 @@ internal class D11_2022 : Day
         public void Inspect()
         {
             Items[0] = operation(Items[0]);
-            Items[0] /= worryDivisor; //phew
-            Items[0] %= moduloMulti;
+            if (worryDivisor == 1) Items[0] %= moduloMulti;
+            else Items[0] /= worryDivisor; //phew
             if (Items[0] % modTest == 0) Monkeys[trueMonkey].Items.Add(Items[0]);
             else Monkeys[falseMonkey].Items.Add(Items[0]);
             Items.RemoveAt(0);
@@ -77,38 +77,13 @@ internal class D11_2022 : Day
     public override void PartA()
     {
         Monkey.Initialize(InputBlocks);
-        for (int i = 0; i < 20; i++) Monkey.PerformRound(1);
-        Submit(Monkey.Monkeys.Select(m => m.Inspections).OrderDescending().Take(2).Mul());
+        for (int i = 0; i < 20; i++) Monkey.PerformRound(3);
+        Submit(Monkey.Monkeys.Select(m => m.Inspections).Top(2).Mul());
     }
     public override void PartB()
     {
         Monkey.Initialize(InputBlocks);
-        List<long> previous = new();
-        int cyclesAt = 0;
-        for (int i = 0; i < 10_000; i++)
-        {
-            long lastRoundCode = 0;
-            for (int n = 0; n < Monkey.Monkeys.Count; n++) lastRoundCode = (lastRoundCode << 8) + Monkey.Monkeys[n].NewInspections;
-            if (i > 200 && previous.Contains(lastRoundCode))
-            {
-                if (cyclesAt == 0)
-                {
-                    cyclesAt = i;
-                    Console.WriteLine($"Cycle located at {cyclesAt}");
-                    previous.Add(lastRoundCode);
-                }
-                Monkey.AddInspections(previous[previous.IndexOf(lastRoundCode) + 1]);
-            }
-            else
-            {
-                previous.Add(lastRoundCode);
-                Monkey.PerformRound(1);
-            }
-        }
-        foreach (var item in Monkey.Monkeys)
-        {
-            Console.WriteLine(item.Inspections);
-        }
-        Copy(Monkey.Monkeys.Select(m => (long)m.Inspections).OrderDescending().Take(2).Mul());
+        for (int i = 0; i < 10_000; i++) Monkey.PerformRound(1);
+        Submit(Monkey.Monkeys.Select(m => (long)m.Inspections).Top(2).Mul());
     }
 }
