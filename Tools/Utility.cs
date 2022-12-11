@@ -58,6 +58,10 @@ public static class Utility
     {
         (a, b) = (b, a);
     }
+    public static void RepeatAction(this Action action, int count)
+    {
+        for (int i = 0; i < count; i++) action();
+    }
     public static T RepeatAction<T>(this T t, Func<T, T> func, int amount)
     {
         for (int i = 0; i < amount; i++) t = func(t);

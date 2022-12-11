@@ -31,6 +31,14 @@ public abstract class DayBase<InputType>
         Setup();
     }
     public virtual void Setup() { } 
+    public virtual void ClearCaches()
+    {
+        _inputRaw= null;
+        _input = null;
+        _inputBlocks = null;
+        _input2D = null;
+        _input2DJagged = null;
+    }
     private string[]? _inputRaw;
     public string[] InputRaw
     {
@@ -156,6 +164,7 @@ public abstract class DayBase<InputType>
         part1Time = sw.Elapsed - wastedTime;
         wastedTimeTotal += wastedTime;
         wastedTime = TimeSpan.Zero;
+        ClearCaches();
         sw.Restart();
         _input = null;
         useExampleInput = false;
@@ -216,7 +225,7 @@ public abstract class DayBase<InputType>
         return input;
     }
     public virtual string[] GetInputForDay() => GetInputForAnyDay(this);
-    public virtual T[] GetInputForDay<T>() => GetInputForDay().ConvertTo<T>().ToArray();
+    public virtual T[] GetInputForDay<T>() => InputRaw.ConvertTo<T>().ToArray();
     public virtual T[][] GetInputForDayBlocks<T>(string splitLine = "")
     {
         List<T[]> results = new List<T[]>();
@@ -324,7 +333,7 @@ public abstract class DayBase<InputType>
         wastedTime += sw.Elapsed;
         return result;
     }
-    private const int secondsBetweenSubmissions = 60;
+    private const int secondsBetweenSubmissions = 61;
     internal static string Submit<T>(string? answer, DayBase<T> day, int part)
     {
         if (string.IsNullOrWhiteSpace(answer)) return "Cannot answer null";
