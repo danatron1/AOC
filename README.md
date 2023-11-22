@@ -15,11 +15,12 @@ Instances of corruption are so rare that I manually delete the locally saved inp
 Inputs are not included in this repo (see .gitignore) as per [input sharing guidelines](https://www.reddit.com/r/adventofcode/wiki/faqs/copyright/inputs/).
 
 Submissions are also automated, with each submission being logged. A submission request to the website is only made if:
-* The answer is NOT null, empty string, white space, 0, or -1.
+* The answer is NOT null, empty string, white space, 1, 0, or -1.
 * The answer is not one you've submitted before.
 * The guess is within the range of possible answers (e.g. if a previous guess of 5000 received the response "too low", all guesses below 5000 are blocked)
 * It's been more than 60 seconds since your last guess. (If it's been less, the program will wait, then submit)
 * The puzzle isn't already solved.
+* The puzzle release date isn't in the future (e.g. cannot submit for 2023-12-01 prior to that date EST)
 
 Assuming all of those checks pass, a submission is made.
 
@@ -31,10 +32,11 @@ These files can be created automatically;
 * `Day.Create(2022, 1);` will create the file D01_2022.cs
 * `Day.CreateYear(2022);` will create 25 files, one for each day of the event.
 
-To run the contents of these files, call `Day.Solve(2022, 1);`
+To run the contents of these files, call `Day.Solve(2015, 1);` or `Day.SolveToday();`
+* `Day.SolveToday();` will run today's solution, for if you're completing puzzles on release day. This method only works December 1st to December 25th.
 * This executes the methods `PartA()` and `PartB()`. It always executes *both*, and in that order. Consider this incentive to write performant code :)
-* You can also use the methods `PartASetup()` and `PartBSetup()` if desired, although you have no requirement to implement those. 
-This can be useful to clear data you may not wish to carry between part A and B. 
+* You can also use the methods `Setup()`, `PartASetup()`, and `PartBSetup()` if desired, although you have no requirement to implement those. 
+This can be useful to clear data you may not wish to carry between part A and B. `Setup()` is run on initialisation, the others are run before their respective parts.
 Remember, it's the same class running both, so anything outside of the scope of `PartA()` will still exist when `PartB()` runs.
 * You may also pass in a boolean value to track performance, e.g. `Day.Solve(2022, 1, true);` - this will tell you how long your code takes to execute. Default false.
 * If this is run for a class that doesn't exist, one will be created first. Code will need recompiling if this happens.
