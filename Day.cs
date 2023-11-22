@@ -7,7 +7,11 @@ using System.Runtime.Intrinsics.Arm;
 using System.Text.RegularExpressions;
 using System.Windows;
 
-public abstract class DayBase<InputType>
+public interface IDayBase
+{
+    void Solve(bool trackPerformance);
+}
+public abstract class DayBase<InputType> : IDayBase
 {
     public int Day { get; init; }
     public int Year { get; init; }
@@ -20,6 +24,25 @@ public abstract class DayBase<InputType>
     public bool TrackingPerformance;
     private TimeSpan wastedTime = new(0);
     public override string ToString() => Name;
+    private static TimeSpan? __est_utc_offset;
+    public static TimeSpan EST_UTC_OFFSET
+    {
+        get
+        {
+            if (__est_utc_offset is null)
+            {
+                try
+                { //try to get timezone the proper way
+                    __est_utc_offset = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time").BaseUtcOffset;
+                }
+                catch
+                { //if that fails, assume it to be -5 (not exactly going to change often)
+                    __est_utc_offset = TimeSpan.FromHours(-5);
+                }
+            }
+            return __est_utc_offset.Value;
+        }
+    }
     public DayBase()
     {
         string[] caller = NameOfCallingClass("Day").Split('_', '.');
@@ -187,24 +210,51 @@ public abstract class DayBase<InputType>
     }
     public virtual void PartASetup() { }
     public virtual void PartBSetup() { }
+    public static void SolveToday(bool trackPerformance = false)
+    {
+        DateTime today = DateTime.UtcNow + EST_UTC_OFFSET;
+        int day = today.Day;
+        Console.WriteLine($"Today's date is {today:dd/MM/yyyy} (EST)");
+        if (day != DateTime.Today.Day)
+        {
+            Console.WriteLine($"(EST is AOC's timezone. Day {day} will be the most recent)");
+        }
+        if (today.Month != 12 || day > 25 || day < 1)
+        {
+            Console.WriteLine($"Day.SolveToday() only works from December 1st to December 25th.");
+            Console.WriteLine($"Consider using Day.Solve({today.Year}, 1) instead.");
+            return;
+        }
+        Solve(today.Year, day, trackPerformance);
+    }
     public static void Solve(int year, int day, bool trackPerformance = false)
     {
         Stopwatch sw = Stopwatch.StartNew();
+        
         Type? type = Type.GetType($"AOC.Y{year}.{NameFor(year, day)}");
         type ??= Type.GetType($"AOC.{NameFor(year, day)}"); //for legacy compatibility
         type ??= Type.GetType($"AOC.D{day}_{year}"); //for legacy compatibility
-        if (type == null)
+        if (type is null)
         {
             Console.WriteLine($"{NameFor(year, day)} doesn't appear to exist. Creating...");
             Create(year, day);
             Console.WriteLine($"Cannot continue with code execution as code must be recompiled to include the newly created file.\nRun the program again.");
             return;
         }
-        Day obj = Activator.CreateInstance(type) as Day;
+        IDayBase? obj = Activator.CreateInstance(type) as IDayBase;
+        if (obj is null)
+        {
+            Console.WriteLine($"Failed to create instance of {type}");
+            return;
+        }
         obj.Solve(trackPerformance);
-        //MethodInfo? methodInfo = type.GetMethod("Solve", new Type[] { typeof(bool) });
-        //if (obj == null || methodInfo == null) return;
-        //methodInfo.Invoke(obj, new object[] { trackPerformance });
+
+        //this solution also works:
+        //dynamic obj = Activator.CreateInstance(type);
+        //obj.Solve(trackPerformance);
+
+        //get generic type:
+        //Type implementingType = type.BaseType.GetGenericArguments().Length == 0 ? typeof(string) : type.BaseType.GetGenericArguments()[0];
         sw.Stop();
         if (trackPerformance) Console.WriteLine($"Completed everything in {sw.Elapsed.AsTime()}\n");
     }
@@ -341,10 +391,17 @@ public abstract class DayBase<InputType>
         Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine(answer);
         Console.ForegroundColor = ConsoleColor.Gray;
-        if (answer == "0" || answer == "-1") //double check common fail values
+
+        DateTime release = new DateTime(day.Year, 12, day.Day, 0, 0, 0, DateTimeKind.Utc);
+        release -= EST_UTC_OFFSET;
+        if (release > DateTime.UtcNow) //double check common fail values
         {
+            Console.WriteLine($"The requested puzzle ({day}) is expected to release in the future.");
+            Console.WriteLine($"{"Current time:",-18}{DateTime.Now}");
+            Console.WriteLine($"{"Expected release:",-18}{release}");
             Console.WriteLine("Are you sure you want to submit this answer? (y/n)");
-            if ((Console.ReadLine()?.ToLower()[0]) != 'y') return "Declined to submit";
+            string? response = Console.ReadLine()?.ToLower();
+            if (string.IsNullOrWhiteSpace(response) || response[0] != 'y') return "Declined to submit";
         }
         #region Load log
         string logPath = @$"{Utility.folderPath}\Logs\{day.Year}";
@@ -423,6 +480,13 @@ public abstract class DayBase<InputType>
 
         long now = DateTimeOffset.Now.ToUnixTimeSeconds();
         #endregion
+        if (answer == "-1" || answer == "0" || answer == "1") //double check common fail values
+        {
+            Console.WriteLine($"{answer} is likely an error or sentinel value.");
+            Console.WriteLine("Are you sure you want to submit this answer? (y/n)");
+            string? response = Console.ReadLine()?.ToLower();
+            if (string.IsNullOrWhiteSpace(response) || response[0] != 'y') return "Declined to submit";
+        }
         return ActuallySubmitAnswer();
         string ActuallySubmitAnswer()
         {

@@ -10,7 +10,6 @@ public static class IntExt
 {
     public static int[] Digits(this int i, int numberBase = 10)
     {
-        //789
         List<int> digits = new();
         while (i > 0)
         {
@@ -32,6 +31,24 @@ public static class IntExt
                 yield return number / i;
             }
         }
+    }
+    public static int Choose(this IEnumerable<object> n, int k) => n.Count().Choose(k);
+    public static int Choose(this int n, int k)
+    {
+        int r = 1;
+        int d;
+        if (k > n) return 0;
+        for (d = 1; d <= k; d++)
+        {
+            r *= n--;
+            r /= d;
+        }
+        return r;
+    }
+    public static int Factorial(this int i)
+    {
+        if (i < 3) return i;
+        return i * Factorial(i - 1);
     }
     public static bool WithinRangeOf(this int x, int range, int value) => value - range <= x && x <= value + range;
 }

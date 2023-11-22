@@ -54,14 +54,12 @@ public class Tally<T> : IEnumerable<T> where T : notnull
     public T GetWeightedRandom()
     {
         long selection = RandomLong(TotalOfPositive);
-        long sum = 0;
         foreach (T item in this)
         {
             if (this[item] < 0) continue;
-            sum += this[item];
-            if (sum >= selection) return item;
+            if ((selection -= this[item]) < 0) return item;
         }
-        return default(T);
+        return default;
     }
     public bool Add(KeyValuePair<T, int> item) => Add(item.Key, item.Value);
     public bool Add(T item, long amount = 1)

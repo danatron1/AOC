@@ -348,12 +348,13 @@ public static class ArrayExt
     {
         return array2D.ToJagged().ToContentString(separator);
     }
-    public static string ToContentString(this IEnumerable array, string separator = ", ")
+    public static string ToContentString(this IEnumerable array, string separator = ", ", bool dontSplitStrings = false)
     {
-        return array.ToContentString(array.NestedDepth(), array.NestedDepth(), separator);
+        return array.ToContentString(array.NestedDepth(), array.NestedDepth(), separator, dontSplitStrings);
     }
-    private static string ToContentString(this IEnumerable array, int maxDepth, int depth, string separator)
+    private static string ToContentString(this IEnumerable array, int maxDepth, int depth, string separator, bool dontSplitStrings = false)
     {
+        if (dontSplitStrings && array is string s) return s;
         string content = "{";
         bool first = true;
         foreach (var item in array)
@@ -363,7 +364,7 @@ public static class ArrayExt
             if (item is IEnumerable e)
             {
                 if (depth > 1) content += "¦ ".Repeat(1 + maxDepth - depth);
-                content += $"{e.ToContentString(maxDepth, depth - 1, separator)}";
+                content += $"{e.ToContentString(maxDepth, depth - 1, separator, dontSplitStrings)}";
             }
             else
             {
@@ -382,19 +383,20 @@ public static class ArrayExt
     public static IEnumerable<int> Counts<T>(this IEnumerable<IEnumerable<T>> array) => array.Select(x => x.Count());
     public static int FirstIndex<T>(this T[] array, Func<T, bool> predicate, out T item)
     {
+        for (int i = 0; i < array.Length; i++)
+        {
+            if (predicate(array[i]))
+            {
+                item = array[i];
+                return i;
+            }
+        }
         item = default;
-        IEnumerable<T> items = array.Where(predicate);
-        if (!items.Any()) return -1;
-        item = items.First();
-        return Array.IndexOf(array, item);
+        return -1;
     }
     public static int FirstIndex(this string s, Func<char, bool> predicate, out char item)
     {
-        item = default;
-        IEnumerable<char> chars = s.Where(predicate);
-        if (!chars.Any()) return -1;
-        item = chars.First();
-        return s.IndexOf(item);
+        return s.ToCharArray().FirstIndex<char>(predicate, out item);
     }
     public static TResult[,] Select2D<TSource, TResult>(this TSource[,] array, Func<TSource, TResult> predicate)
     {

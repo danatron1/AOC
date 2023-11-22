@@ -2,7 +2,7 @@ namespace AOC.Y2015;
 internal class D19_2015 : Day
 {
     List<(string, string)> transformations = new();
-    string start = "e";
+    string start = "e"; 
     string target;
     public override void PartASetup()
     {
