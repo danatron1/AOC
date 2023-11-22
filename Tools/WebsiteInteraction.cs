@@ -46,23 +46,8 @@ public static class WebsiteInteraction
     public static async Task<string[]> DownloadAOCInput<T>(DayBase<T> d)
     {
         string pathFull = $@"{Utility.folderPath}\Inputs\{d.Year}";
-        Directory.CreateDirectory(pathFull);
-        pathFull += $@"\{d.Name}_{(d.useExampleInput ? "Example" : "Input")}.txt";
-        if (d.useExampleInput)
-        {
-            if (!File.Exists(pathFull))
-            {
-                Console.WriteLine($"First time using example inputs for {d}.\nCreated file at {pathFull}");
-                return Utility.GetUserInputs(pathFull);
-            }
-            return File.ReadAllLines(pathFull);
-        }
-        if (!File.Exists(pathFull))
-        {
-            Console.WriteLine($"Input file not downloaded for {d}, fetching.");
-            string result = await GetContent($"/{d.Year}/day/{d.Day}/input");
-            await File.WriteAllTextAsync(pathFull, result);
-        }
+        string result = await GetContent($"/{d.Year}/day/{d.Day}/input");
+        await File.WriteAllTextAsync(pathFull, result);
         return File.ReadAllLines(pathFull);
     }
     internal static async Task<string> SubmitAOCAnswer(string answer, int year, int day, int part)

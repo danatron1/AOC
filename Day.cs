@@ -268,7 +268,40 @@ public abstract class DayBase<InputType> : IDayBase
     public static string[] GetInputForAnyDay<T>(DayBase<T> d)
     {
         Stopwatch sw = Stopwatch.StartNew();
-        string[] input = WebsiteInteraction.DownloadAOCInput(d).Result;
+        string pathFull = $@"{Utility.folderPath}\Inputs\{d.Year}";
+        string[] input;
+        Directory.CreateDirectory(pathFull);
+        pathFull += $@"\{d.Name}_{(d.useExampleInput ? "Example" : "Input")}.txt";
+        //if should use example
+        if (d.useExampleInput)
+        {
+            if (!File.Exists(pathFull))
+            {
+                Console.WriteLine($"First time using example inputs for {d}.\nCreated file at {pathFull}");
+                input = Utility.GetUserInputs(pathFull);
+            }
+            else input = File.ReadAllLines(pathFull);
+        }
+        //using real input
+        else if (!File.Exists(pathFull))
+        {
+            Console.WriteLine($"Input file not downloaded for {d}, fetching.");
+
+            //check if you're requesting a puzzle input download prior to its release
+            DateTime release = new DateTime(d.Year, 12, d.Day, 0, 0, 0, DateTimeKind.Utc) - EST_UTC_OFFSET;
+            if (release > DateTime.UtcNow)
+            {
+                Console.WriteLine($"The requested puzzle ({d}) is expected to release in the future.");
+                Console.WriteLine($"{"Current UTC time:",-18}{DateTime.UtcNow}");
+                Console.WriteLine($"{"Expected release:",-18}{release}");
+                Console.WriteLine("Are you sure you want to attempt to download the puzzle input? (y/n)");
+                string? response = Console.ReadLine()?.ToLower();
+                if (string.IsNullOrWhiteSpace(response) || response[0] != 'y') return new string[] { "Puzzle not yet available!" };
+            }
+
+            input = WebsiteInteraction.DownloadAOCInput(d).Result;
+        }
+        else input = File.ReadAllLines(pathFull);
         sw.Stop();
         if (d.TrackingPerformance) Console.WriteLine($"Retrieved input for {d} in {sw.Elapsed.AsTime()}");
         d.wastedTime += sw.Elapsed;
@@ -392,12 +425,11 @@ public abstract class DayBase<InputType> : IDayBase
         Console.WriteLine(answer);
         Console.ForegroundColor = ConsoleColor.Gray;
 
-        DateTime release = new DateTime(day.Year, 12, day.Day, 0, 0, 0, DateTimeKind.Utc);
-        release -= EST_UTC_OFFSET;
-        if (release > DateTime.UtcNow) //double check common fail values
+        DateTime release = new DateTime(day.Year, 12, day.Day, 0, 0, 0, DateTimeKind.Utc) - EST_UTC_OFFSET;
+        if (release > DateTime.UtcNow)
         {
             Console.WriteLine($"The requested puzzle ({day}) is expected to release in the future.");
-            Console.WriteLine($"{"Current time:",-18}{DateTime.Now}");
+            Console.WriteLine($"{"Current UTC time:",-18}{DateTime.UtcNow}");
             Console.WriteLine($"{"Expected release:",-18}{release}");
             Console.WriteLine("Are you sure you want to submit this answer? (y/n)");
             string? response = Console.ReadLine()?.ToLower();

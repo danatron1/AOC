@@ -10,7 +10,7 @@ internal class D01_2023 : Day
 {
     public override void PartA()
     {
-        Submit(0);
+        Submit(InputLine);
         throw new NotImplementedException();
     }
     public override void PartB()
