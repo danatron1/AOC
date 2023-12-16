@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,4 +52,40 @@ public static class IntExt
         return i * Factorial(i - 1);
     }
     public static bool WithinRangeOf(this int x, int range, int value) => value - range <= x && x <= value + range;
+    public static T GCF<T>(T a, T b) where T : INumber<T>
+    {
+        while (b != T.Zero)
+        {
+            T temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    }
+    public static T LCM<T>(T a, T b) where T : INumber<T>
+    {
+        return a / GCF(a, b) * b;
+    }
+    public static string BitString(this int x, int numBase = 2, bool padToByte = true, bool gapEveryByte = true, int minLength = 0)
+    {
+        int padding = 0;
+        if (padToByte)
+        {
+            for (int i = x; i is not (0 or -1); i>>=8)
+            {
+                padding += 8;
+            }
+        }
+        padding = Math.Max(padding, minLength);
+        string bits = Convert.ToString(x, numBase).PadLeft(padding, '0');
+        if (gapEveryByte)
+        {
+            for (int i = bits.Length; i > 8; i-=8)
+            {
+                int addSpace = ((i-1) >> 3) << 3;
+                bits = bits[..addSpace] + ' ' + bits[addSpace..];
+            }
+        }
+        return bits;
+    }
 }

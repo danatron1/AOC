@@ -18,18 +18,6 @@ namespace AOC
             Submit(FindMD5StartingWith("000000"));
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
         int FindMD5StartingWith(string sequence)
         {
             string input = GetInputForDay()[0];

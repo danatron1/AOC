@@ -6,20 +6,23 @@ using System.Threading.Tasks;
 using static AOC.Items.Graph;
 
 namespace AOC.Items;
-public class Pathfinder
+public class GraphPathfinder
 {
     #region UNFINISHED PROJECT
     //Vertex Start;
     Graph Graph;
-
-    bool ReachVertex(Vertex target, Vertex start, out ReachedVertex found)
+    public GraphPathfinder(Graph graph)
+    {
+        Graph = graph;
+    }
+    public bool Reach(Vertex target, Vertex start, out ReachedVertex found)
     {
         List<ReachedVertex> reached = new();
         PriorityQueue<ReachedVertex, int> queue = new();
         found = new ReachedVertex(start, null, 0);
+        reached.Add(found);
         foreach (Vertex node in Graph.Vertices)
         {
-            reached.Add(new(node, null, int.MaxValue));
             queue.Enqueue(reached[^1], int.MaxValue);
         }
         while (queue.Count > 0)

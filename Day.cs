@@ -13,6 +13,8 @@ public interface IDayBase
 }
 public abstract class DayBase<InputType> : IDayBase
 {
+    public static int[] EventDays = new int[]
+    { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 };
     public int Day { get; init; }
     public int Year { get; init; }
     public string Name { get; init; }
@@ -52,6 +54,39 @@ public abstract class DayBase<InputType> : IDayBase
         CacheAnswerLimits(); //min and max
         Directory.CreateDirectory($@"{Utility.folderPath}\Inputs\{Year}");
         Setup();
+    }
+    public DateTime PuzzleReleaseDate => PuzzleReleaseDateUTC(Year, Day);
+    public bool PuzzleReleased => DateTime.UtcNow >= PuzzleReleaseDate;
+    public TimeSpan PuzzleReleaseTimeRemaining => PuzzleReleaseDate - DateTime.UtcNow;
+    public static DateTime EST_Date => DateTime.UtcNow + EST_UTC_OFFSET;
+    public static bool EventRunning(out int newestYear, out int newestDay)
+    {
+        if (EST_Date.Month != 12)
+        {
+            newestYear = EST_Date.Year - 1;
+            newestDay = EventDays.Last();
+            return false;
+        }
+        newestYear = EST_Date.Year;
+        if (EventDays.Contains(EST_Date.Day))
+        {
+            newestDay = EST_Date.Day;
+            return true;
+        }
+        newestDay = EventDays.Last();
+        return false;
+    }
+    public static TimeSpan NextPuzzleReleaseTimeRemaining => NextPuzzleReleaseDate() - DateTime.UtcNow;
+    public static DateTime NextPuzzleReleaseDate()
+    {
+        if (EventRunning(out int year, out int day) && day < EventDays.Length) return PuzzleReleaseDateUTC(year, day + 1);
+        if (EST_Date.Month < 12) year = EST_Date.Year;
+        else year = EST_Date.Year + 1;
+        return PuzzleReleaseDateUTC(year, 1);
+    }
+    public static DateTime PuzzleReleaseDateUTC(int year, int day)
+    {
+        return new DateTime(year, 12, day, 0, 0, 0, DateTimeKind.Utc) - EST_UTC_OFFSET;
     }
     public virtual void Setup() { } 
     public virtual void ClearCaches()
@@ -177,6 +212,7 @@ public abstract class DayBase<InputType> : IDayBase
         Stopwatch sw = Stopwatch.StartNew();
         try
         {
+            PrintSolveBeginMessage("A");
             PartASetup();
             PartA();
         }
@@ -193,6 +229,7 @@ public abstract class DayBase<InputType> : IDayBase
         useExampleInput = false;
         try
         {
+            PrintSolveBeginMessage("B");
             PartBSetup();
             PartB();
         }
@@ -207,25 +244,35 @@ public abstract class DayBase<InputType> : IDayBase
             Console.WriteLine($"Part B completed in {(sw.Elapsed - wastedTime).AsTime()}");
             Console.WriteLine($"Time spent submitting/fetching inputs: {wastedTimeTotal.AsTime()}");
         }
+        void PrintSolveBeginMessage(string part)
+        {
+            Console.Write($"\nNow solving {this} (");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($"Part {part}");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine(")");
+
+        }
     }
     public virtual void PartASetup() { }
     public virtual void PartBSetup() { }
-    public static void SolveToday(bool trackPerformance = false)
+    public static void SolveMostRecent(bool trackPerformance = false)
     {
-        DateTime today = DateTime.UtcNow + EST_UTC_OFFSET;
-        int day = today.Day;
-        Console.WriteLine($"Today's date is {today:dd/MM/yyyy} (EST)");
-        if (day != DateTime.Today.Day)
+        Console.WriteLine($"Today's date is {EST_Date:dd/MM/yyyy} (EST)");
+        if (EST_Date.Day != DateTime.Today.Day)
         {
-            Console.WriteLine($"(EST is AOC's timezone. Day {day} will be the most recent)");
+            Console.WriteLine($"(EST is AOC's timezone. While it's {DateTime.Today.DayOfWeek} for you, it's {EST_Date:t} on {EST_Date.DayOfWeek} on the US east coast)");
         }
-        if (today.Month != 12 || day > 25 || day < 1)
+        bool running = EventRunning(out int newestYear, out int newestDay);
+        if (running) Console.WriteLine($"Advent of Code is running! Solving most recent day: {NameFor(newestYear, newestDay)}");
+        else if (NextPuzzleReleaseTimeRemaining < TimeSpan.FromMinutes(20))
         {
-            Console.WriteLine($"Day.SolveToday() only works from December 1st to December 25th.");
-            Console.WriteLine($"Consider using Day.Solve({today.Year}, 1) instead.");
-            return;
+            Console.WriteLine($"Next puzzle releases in under 20 minutes. Waiting...");
+            Thread.Sleep(NextPuzzleReleaseTimeRemaining);
+            newestDay++;
         }
-        Solve(today.Year, day, trackPerformance);
+        else Console.WriteLine($"Most recent puzzle is day {newestDay} of {newestYear}");
+        Solve(newestYear, newestDay, trackPerformance);
     }
     public static void Solve(int year, int day, bool trackPerformance = false)
     {
@@ -288,7 +335,7 @@ public abstract class DayBase<InputType> : IDayBase
             Console.WriteLine($"Input file not downloaded for {d}, fetching.");
 
             //check if you're requesting a puzzle input download prior to its release
-            DateTime release = new DateTime(d.Year, 12, d.Day, 0, 0, 0, DateTimeKind.Utc) - EST_UTC_OFFSET;
+            DateTime release = new DateTime(d.Year, 12, d.Day, 0, 0, 0, DateTimeKind.Utc) + EST_UTC_OFFSET;
             if (release > DateTime.UtcNow)
             {
                 Console.WriteLine($"The requested puzzle ({d}) is expected to release in the future.");
@@ -392,13 +439,79 @@ public abstract class DayBase<InputType> : IDayBase
     }
     internal static void CreateYear(int year)
     {
-        for (int i = 1; i <= 25; i++)
+        foreach (int day in EventDays) Create(year, day);
+    }
+    private static int StarsOnDay(int year, int day)
+    {
+        int stars = 0;
+        string logPath = @$"{Utility.folderPath}\Logs\{year}";
+        string filePath = @$"{logPath}\{NameFor(year, day)}_LOG.txt";
+        if (Directory.Exists(logPath) && File.Exists(filePath))
         {
-            Create(year, i);
+            string file = File.ReadAllText(filePath);
+            if (file.Contains(",Correct,1")) stars++;
+            if (file.Contains(",Correct,2")) stars++;
+        }
+        return stars;
+    }
+    private static int StarsOnYear(int year)
+    {
+        return EventDays.Select(d => StarsOnDay(year, d)).Sum();
+    }
+    internal static void OverallCompletion()
+    {
+        int possible, total = 0, totalPossible = 0;
+        bool running = EventRunning(out int newestYear, out int newestDay);
+        for (int year = 2015; year <= newestYear; year++)
+        {
+            if (year == newestYear) possible = newestDay * 2;
+            else possible = EventDays.Length * 2;
+            Console.Write($"[{year}] ");
+            int count = StarsOnYear(year);
+            total += count;
+            totalPossible += possible;
+            PrintStarCompletionRatio(count, possible);
+        }
+        Console.Write("\nTotal stars: ");
+        PrintStarCompletionRatio(total, totalPossible);
+    }
+    private static void PrintStarCompletionRatio(int count, int possible)
+    {
+        if (count == possible) Console.ForegroundColor = ConsoleColor.Yellow;
+        else if (count > 0) Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine($"{count}/{possible}*");
+        Console.ForegroundColor = ConsoleColor.Gray;
+    }
+    internal static void Completion(params int[] years)
+    {
+        EventRunning(out int newestYear, out int newestDay);
+        foreach (int year in years)
+        {
+            if (year < 2015 || year > newestYear) continue;
+            Console.WriteLine($"\n====={year}=====");
+            int total = 0;
+            int days = year == newestYear ? newestDay : EventDays.Length;
+            int possible = days * 2;
+            for (int day = 1; day <= days; day++)
+            {
+                Console.Write($"{day,2} ");
+                int stars = StarsOnDay(year, day);
+                total += stars;
+                Console.ForegroundColor = stars == 2 ? ConsoleColor.Yellow : ConsoleColor.White;
+                Console.WriteLine("*".Repeat(stars));
+                Console.ForegroundColor = ConsoleColor.Gray;
+            }
+            Console.Write($"\nTotal stars for {year}: ");
+            PrintStarCompletionRatio(total, possible);
         }
     }
     internal virtual string Submit(object answer)
     {
+        if (useExampleInput)
+        {
+            Console.WriteLine($"Your answer ({answer}) was not submitted as you're using the example input.");
+            return "Example input";
+        }
         Stopwatch sw = Stopwatch.StartNew();
         if (answer is null)
         {
@@ -599,7 +712,7 @@ public abstract class DayBase<InputType> : IDayBase
             }
             else
             {
-                string errorPath = $"{logPath}\\D{day}_ERROR_{now}.txt";
+                string errorPath = $"{logPath}\\{day}_ERROR_{now}.txt";
                 Console.WriteLine($"Couldn't tell if {answer} was right or wrong. Error log created at:\n{errorPath}");
                 File.WriteAllText(errorPath, result);
                 result = "Undetermined";
@@ -626,12 +739,12 @@ public abstract class DayBase<InputType> : IDayBase
         if (part == 1)
         {
             if (!MinimumA.HasValue || (newMin.HasValue && newMin > MinimumA)) MinimumA = newMin;
-            if (!MaximumA.HasValue || (newMax.HasValue && newMax > MaximumA)) MaximumA = newMax;
+            if (!MaximumA.HasValue || (newMax.HasValue && newMax < MaximumA)) MaximumA = newMax;
         }
         else if (part == 2)
         {
             if (!MinimumB.HasValue || (newMin.HasValue && newMin > MinimumB)) MinimumB = newMin;
-            if (!MaximumB.HasValue || (newMax.HasValue && newMax > MaximumB)) MaximumB = newMax;
+            if (!MaximumB.HasValue || (newMax.HasValue && newMax < MaximumB)) MaximumB = newMax;
         }
     }
     internal int GetPart()

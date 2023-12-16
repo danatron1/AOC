@@ -45,7 +45,7 @@ public static class WebsiteInteraction
     }
     public static async Task<string[]> DownloadAOCInput<T>(DayBase<T> d)
     {
-        string pathFull = $@"{Utility.folderPath}\Inputs\{d.Year}";
+        string pathFull = $@"{Utility.folderPath}\Inputs\{d.Year}\{d}_Input.txt";
         string result = await GetContent($"/{d.Year}/day/{d.Day}/input");
         await File.WriteAllTextAsync(pathFull, result);
         return File.ReadAllLines(pathFull);

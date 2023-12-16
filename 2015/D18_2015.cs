@@ -31,10 +31,8 @@ internal class D18_2015 : Day<char>
         Submit(gol.grid.GetPoints().Count());
         void TurnOnCorners()
         {
-            foreach (Point2D p in gol.grid.GetCorners())
-            {
-                gol.grid[p] = true;
-            }
+            var corners = gol.grid.GetCorners();
+            gol.grid.SetPoints(true, corners.TopLeft, corners.TopRight, corners.BottomLeft, corners.BottomRight);
         }
     }
 }

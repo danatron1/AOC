@@ -16,7 +16,7 @@ namespace AOC.Y2022
         }
         bool VisibleFromEdge(Grid<int> forest, KeyValuePair<Point2D, int> point)
         {
-            foreach (Point2D.Direction dir in (Point2D.Direction[])Enum.GetValues(typeof(Point2D.Direction)))
+            foreach (Direction dir in (Direction[])Enum.GetValues(typeof(Direction)))
             {
                 Point2D evaluating = point.Key.NextIn(dir);
                 while (forest[evaluating] < point.Value)
@@ -37,7 +37,7 @@ namespace AOC.Y2022
         {
             int score = 1;
             int rowScore = 0;
-            foreach (Point2D.Direction dir in (Point2D.Direction[])Enum.GetValues(typeof(Point2D.Direction)))
+            foreach (Direction dir in (Direction[])Enum.GetValues(typeof(Direction)))
             {
                 Point2D evaluating = point.Key.NextIn(dir);
                 int visibleTrees = 0;

@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Numerics;
 
 public static class ArrayExt
 {
@@ -190,6 +192,24 @@ public static class ArrayExt
             yield return indexes.Select(x => array.ElementAt(x)).ToArray();
         }
     }
+    //more performant than pairs. Test more before replacing Pairs()
+    public static IEnumerable<IEnumerable<T>> PairsAlt<T>(this IEnumerable<T> array, int groupsOf = 2, bool allowDuplicates = false) where T : IComparable<T>
+    {
+        if (allowDuplicates)
+        {
+            if (groupsOf == 1) return array.Select(t => new T[] { t });
+            return PairsAlt(array, groupsOf - 1, allowDuplicates: true)
+                .SelectMany(t => array.Where(o => o.CompareTo(t.Last()) >= 0),
+                    (t1, t2) => t1.Concat(new T[] { t2 }));
+        }
+        else
+        {
+            if (groupsOf == 1) return array.Select(t => new T[] { t });
+            return PairsAlt(array, groupsOf - 1, allowDuplicates: false)
+                .SelectMany(t => array.Where(o => o.CompareTo(t.Last()) > 0),
+                    (t1, t2) => t1.Concat(new T[] { t2 }));
+        }
+    }
     #endregion
     /// <summary>
     /// Same as .Select, but you also have access to the previous element in the array.<br/>
@@ -224,6 +244,20 @@ public static class ArrayExt
             }
         }
     }
+    /// <summary>
+    /// A function that returns only equal numbers in identical positions, similar to bitwise AND.<br/>
+    /// If position is irrelevant, use <c>a.Intersect(b)</c> instead. <br/>
+    /// <example>
+    /// <c>a.Overlap(b) => ["Red", "Green"]</c> when <br/>
+    /// a = <c>["Red", "Pink", "Green", "Yellow"]</c> <br/>
+    /// b = <c>["Red", "Blue", "Green", "Pink"]</c>
+    /// </example>
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <param name="orderMatters"></param>
+    /// <returns></returns>
     public static IEnumerable<T> Overlap<T>(this IEnumerable<T> a, IEnumerable<T> b, bool orderMatters = true)
     {
         if (!orderMatters) return a.Intersect(b);
@@ -262,7 +296,7 @@ public static class ArrayExt
             yield return item.Append(length).Prepend(0).ToArray();
         }
     }
-    public static IEnumerable<IEnumerable<int>> SplitToChunkLengths<T>(this IEnumerable<T> collection, int segmentCount)
+    private static IEnumerable<IEnumerable<int>> SplitToChunkLengths<T>(this IEnumerable<T> collection, int segmentCount)
     {
         return collection.Count().SplitToChunks(segmentCount);
     }
@@ -348,11 +382,11 @@ public static class ArrayExt
     {
         return array2D.ToJagged().ToContentString(separator);
     }
-    public static string ToContentString(this IEnumerable array, string separator = ", ", bool dontSplitStrings = false)
+    public static string ToContentString(this IEnumerable array, string separator = ", ", bool dontSplitStrings = true)
     {
         return array.ToContentString(array.NestedDepth(), array.NestedDepth(), separator, dontSplitStrings);
     }
-    private static string ToContentString(this IEnumerable array, int maxDepth, int depth, string separator, bool dontSplitStrings = false)
+    private static string ToContentString(this IEnumerable array, int maxDepth, int depth, string separator, bool dontSplitStrings = true)
     {
         if (dontSplitStrings && array is string s) return s;
         string content = "{";
@@ -375,6 +409,8 @@ public static class ArrayExt
         if (depth > 1) content += "\n" + "¦ ".Repeat(maxDepth - depth);
         return content + "}";
     }
+    public static int Mul<T>(this IEnumerable<T> array, Func<T, int> predicate) => array.Select(predicate).Mul();
+    public static long Mul<T>(this IEnumerable<T> array, Func<T, long> predicate) => array.Select(predicate).Mul();
     public static int Mul(this IEnumerable<int> array) => array.Aggregate(1, (a, b) => a * b);
     public static long Mul(this IEnumerable<long> array) => array.Aggregate<long, long>(1, (a, b) => a * b);
     public static long MulAsLong(this IEnumerable<int> array) => array.Select(i => (long)i).Mul();
@@ -508,4 +544,6 @@ public static class ArrayExt
     }
     public static IEnumerable<T> Top<T>(this IEnumerable<T> source, int count) => source.OrderDescending().Take(count);
     public static IEnumerable<T> Bottom<T>(this IEnumerable<T> source, int count) => source.Order().Take(count);
+    public static T LCM<T>(this IEnumerable<T> values) where T : INumber<T> => values.Aggregate(T.One, IntExt.LCM<T>);
+    public static T GCF<T>(this IEnumerable<T> values) where T : INumber<T> => values.Aggregate(T.Zero, IntExt.GCF<T>);
 }
