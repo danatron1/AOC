@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AOC.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -11,8 +12,8 @@ namespace AOC.Items;
 
 public struct Point2D : IEquatable<Point2D>, IEqualityComparer<Point2D>, 
     IAdditionOperators<Point2D, Point2D, Point2D>, ISubtractionOperators<Point2D, Point2D, Point2D>, 
-    IMultiplyOperators<Point2D, int, Point2D>, IDivisionOperators<Point2D, int, Point2D>, IComparable<Point2D>
-    
+    IMultiplyOperators<Point2D, int, Point2D>, IDivisionOperators<Point2D, int, Point2D>, IComparable<Point2D>,
+    IPathfinderNode<Point2D> 
 {
     public int X { get; init; }
     public int Y { get; init; }
@@ -57,20 +58,19 @@ public struct Point2D : IEquatable<Point2D>, IEqualityComparer<Point2D>,
             }
         }
     }
-    internal readonly IEnumerable<Point2D> Adjacent(bool includeSelf = false)
+    public readonly IEnumerable<Point2D> Adjacent()
     {
         yield return North;
-        yield return West;
-        if (includeSelf) yield return this;
         yield return East;
         yield return South;
+        yield return West;
     }
     internal readonly IEnumerable<(Point2D point, Direction dir)> AdjacentWithDirection()
     {
         yield return (North, Direction.North);
-        yield return (West, Direction.West);
         yield return (East, Direction.East);
         yield return (South, Direction.South);
+        yield return (West, Direction.West);
     }
     public int ManhattanDistanceTo(Point2D other) => Math.Abs(other.X - X) + Math.Abs(other.Y - Y);
     public double PythagorasDistanceTo(Point2D other)
@@ -80,35 +80,17 @@ public struct Point2D : IEquatable<Point2D>, IEqualityComparer<Point2D>,
         return Math.Sqrt(x * x + y * y);
     }
     public override string ToString() => $"({X}, {Y})";
-    internal Point2D NextIn(Direction dir)
+    internal Point2D NextIn(Direction? dir, int distance = 1)
     {
         return dir switch
         {
-            Direction.North => North,
-            Direction.East => East,
-            Direction.South => South,
-            Direction.West => West,
+            Direction.North => (X, Y + distance),
+            Direction.East => (X + distance, Y),
+            Direction.South => (X, Y - distance),
+            Direction.West => (X - distance, Y),
             _ => this,
         };
     }
-
-    internal static Direction DirectionFromChar(char c)
-    {
-        c = char.ToUpper(c);
-        switch(c)
-        {
-            case 'U': //up
-            case 'N': return Direction.North;
-            case 'R': //right
-            case 'E': return Direction.East;
-            case 'D': //down
-            case 'S': return Direction.South;
-            case 'L': //left
-            case 'W': return Direction.West;
-        }
-        throw new NotImplementedException($"The case for char {c} is not handled.");
-    }
-
     public override bool Equals(object obj) => obj is Point2D && Equals((Point2D)obj);
 
     public override int GetHashCode() => GetHashCode(this);
@@ -117,5 +99,19 @@ public struct Point2D : IEquatable<Point2D>, IEqualityComparer<Point2D>,
     {
         if (Y == other.Y) return X.CompareTo(other.X);
         return -Y.CompareTo(other.Y);
+    }
+    public Direction? DirectionFrom(Point2D source)
+    {
+        if (X == source.X)
+        {
+            if (Y < source.Y) return Direction.South;
+            if (Y > source.Y) return Direction.North;
+        }
+        if (Y == source.Y)
+        {
+            if (X < source.X) return Direction.West;
+            if (X > source.X) return Direction.East;
+        }
+        return null;
     }
 }

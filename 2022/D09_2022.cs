@@ -24,7 +24,7 @@ namespace AOC.Y2022
             }
             public void Move(params char[] dir)
             {
-                foreach (char c in dir) Location = Location.NextIn(DirectionFromChar(c));
+                foreach (char c in dir) Location = Location.NextIn(DirectionExt.FromChar(c));
                 foreach (Rope r in Children) r.ChaseParent();
             }
             public void ChaseParent()

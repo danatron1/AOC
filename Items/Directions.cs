@@ -15,6 +15,44 @@ namespace AOC.Items
     }
     public static class DirectionExt
     {
+        public static bool North(this Direction dir) => dir == Direction.North;
+        public static bool East(this Direction dir) => dir == Direction.East;
+        public static bool South(this Direction dir) => dir == Direction.South;
+        public static bool West(this Direction dir) => dir == Direction.West;
+        public static char ToChar(this Direction dir)
+        {
+            return dir switch
+            {
+                Direction.North => 'N',
+                Direction.East => 'E',
+                Direction.South => 'S',
+                Direction.West => 'W',
+                _ => throw new NotImplementedException($"The ToChar case for direction {dir} is not handled."),
+            };
+        }
+        internal static Direction FromChar(char c)
+        {
+            c = char.ToUpper(c);
+            return c switch
+            {
+                //up
+                'U' or 'N' => Direction.North,
+                //right
+                'R' or 'E' => Direction.East,
+                //down
+                'D' or 'S' => Direction.South,
+                //left
+                'L' or 'W' => Direction.West,
+                _ => throw new NotImplementedException($"The FromChar case for char {c} is not handled."),
+            };
+        }
+        public static IEnumerable<Direction> All()
+        {
+            yield return Direction.North;
+            yield return Direction.East;
+            yield return Direction.South;
+            yield return Direction.West;
+        }
         public static bool Vertical(this Direction dir) => dir is Direction.North or Direction.South;
         public static bool Horizontal(this Direction dir) => dir is Direction.East or Direction.West;
         public static Direction Opposite(this Direction dir)

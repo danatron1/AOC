@@ -27,7 +27,7 @@ internal class D10_2023 : Day<char>
         grid[start] = FindImpliedSCharacter(grid, start);
 
         var pathfinder = grid.CreatePathfinder();
-        pathfinder.ConnectivityTest = PipeConnects;
+        pathfinder.TileConnectivityTest = PipeConnects;
         var nodes = pathfinder.FloodFill(start);
         Submit(nodes.MaxBy(x => x.Cost)!.Cost);
     }
@@ -74,21 +74,25 @@ internal class D10_2023 : Day<char>
         grid[start] = FindImpliedSCharacter(grid, start);
 
         var pathfinder = grid.CreatePathfinder();
-        pathfinder.ConnectivityTest = PipeConnects;
+        pathfinder.TileConnectivityTest = PipeConnects;
         var nodes = pathfinder.FloodFill(start);
         HashSet<Point2D> pipePoints = nodes.Select(x => x.Point).ToHashSet();
         int enclosed = 0;
         bool insidePipe = false;
-        ////https://en.wikipedia.org/wiki/Nonzero-rule
-        foreach (Point2D point in grid.ScanInReadingOrder())
+        foreach (Point2D point in grid.ScanInReadingOrder()) //left to right, top to bottom
         {
             if (pipePoints.Contains(point))
             {
                 if (hasSouthConnection.Contains(grid[point])) insidePipe = !insidePipe;
             }
-            else if (insidePipe) enclosed++;
+            else if (insidePipe)
+            {
+                enclosed++;
+                grid[point] = '#';
+            }
+            else grid[point] = '.';
         }
         Submit(enclosed);
-        //grid.PrintBoard();
+        grid.PrintBoard();
     }
 }

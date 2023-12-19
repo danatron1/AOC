@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -10,31 +11,43 @@ namespace AOC.Items
     public class GridPathfinder<T> where T : notnull
     {
         public Grid<T> Grid;
-        public Point2D? Target;
-        public delegate bool ConnectionRule(T from, T to, Direction dir);
-        public ConnectionRule ConnectivityTest = (_,_,_) => true;
+        private Point2D? Target;
+        public delegate bool TileConnectionRule(T from, T to, Direction dir);
+        public TileConnectionRule TileConnectivityTest = (_,_,_) => true;
+        public delegate bool TravellerConnectionRule(PathfinderPoint2D from, PathfinderPoint2D to, Direction dir);
+        public TravellerConnectionRule TravellerConnectivityTest = (_,_,_) => true;
         public delegate bool VictoryRule(Point2D on);
         public VictoryRule VictoryTest;
+        public delegate bool RemoveOldPathRule(PathfinderPoint2D oldPoint, PathfinderPoint2D newPoint);
+        public RemoveOldPathRule RemoveOldPathTest = (old, n) => old.CostDistance > n.CostDistance;
+        public delegate bool AddNewPathRule(PathfinderPoint2D? oldPoint, PathfinderPoint2D newPoint);
+        public AddNewPathRule AddNewPathTest = (old, n) => old is null || n.CostDistance < old.CostDistance;
+        public delegate int StepPenaltyHeuristicRule(Grid<T> grid, PathfinderPoint2D previous, Point2D next);
+        public StepPenaltyHeuristicRule StepPenaltyHeuristic = (_, prev, _) => prev.Cost + 1;
         public GridPathfinder(Grid<T> grid)
         {
             Grid = grid;
         }
         public GridPathfinder(Grid<T> grid, Point2D target) : this(grid)
         {
-            Target = target;
-            VictoryTest = p => p == target;
+            SetTarget(target);
         }
-        public GridPathfinder(Grid<T> grid, Point2D target, ConnectionRule connectionRule) : this(grid, target)
+        public void SetTarget(Point2D target)
         {
-            ConnectivityTest = connectionRule;
+            VictoryTest = p => p == target;
+            Target = target;
+        }
+        public GridPathfinder(Grid<T> grid, Point2D target, TileConnectionRule connectionRule) : this(grid, target)
+        {
+            TileConnectivityTest = connectionRule;
         }
         public GridPathfinder(Grid<T> grid, VictoryRule victoryRule) : this(grid)
         {
             VictoryTest = victoryRule;
         }
-        public GridPathfinder(Grid<T> grid, VictoryRule victoryRule, ConnectionRule connectionRule) : this(grid, victoryRule)
+        public GridPathfinder(Grid<T> grid, VictoryRule victoryRule, TileConnectionRule connectionRule) : this(grid, victoryRule)
         {
-            ConnectivityTest = connectionRule;
+            TileConnectivityTest = connectionRule;
         }
 
         public bool Reach(Point2D start, out PathfinderPoint2D found)
@@ -58,12 +71,8 @@ namespace AOC.Items
                 {
                     if (visited.Contains(adjacent.Point)) continue;
                     PathfinderPoint2D? existing = active.FirstOrDefault(x => x.Point == adjacent.Point);
-                    if (existing is null) active.Add(adjacent);
-                    else if (existing.CostDistance >= adjacent.CostDistance)
-                    {
-                        active.Remove(existing);
-                        active.Add(adjacent);
-                    }
+                    if (AddNewPathTest(existing, adjacent)) active.Add(adjacent);
+                    if (existing is not null && RemoveOldPathTest(existing, adjacent)) active.Remove(existing);
                 }
             } while (active.Any());
 
@@ -74,8 +83,9 @@ namespace AOC.Items
             foreach (var adjacent in from.Point.AdjacentWithDirection())
             {
                 if (!Grid.ContainsPoint(adjacent.point)) continue;
-                if (!ConnectivityTest(Grid[from.Point], Grid[adjacent.point], adjacent.dir)) continue;
-                PathfinderPoint2D adjacentTile = new PathfinderPoint2D(adjacent.point, from);
+                if (!TileConnectivityTest(Grid[from.Point], Grid[adjacent.point], adjacent.dir)) continue;
+                PathfinderPoint2D adjacentTile = new PathfinderPoint2D(adjacent.point, from, StepPenaltyHeuristic(Grid, from, adjacent.point));
+                if (!TravellerConnectivityTest(from, adjacentTile, adjacent.dir)) continue;
                 adjacentTile.SetDistance(Target);
                 yield return adjacentTile;
             }
@@ -114,6 +124,7 @@ namespace AOC.Items
             public Point2D Point;
             public int Cost = 0;
             public int Distance;
+            public string Memory = string.Empty; //used to store arbitrary information for use with TravellerConnectivityRule
             public int CostDistance => Cost + Distance;
             public PathfinderPoint2D? previous;
             public void SetDistance(Point2D? target)
@@ -134,10 +145,10 @@ namespace AOC.Items
             {
                 Point = point;
             }
-            public PathfinderPoint2D(Point2D point, PathfinderPoint2D from) : this(point)
+            public PathfinderPoint2D(Point2D point, PathfinderPoint2D from, int cost) : this(point)
             {
                 previous = from;
-                Cost = from.Cost + 1;
+                Cost = cost;
             }
         }
     }
