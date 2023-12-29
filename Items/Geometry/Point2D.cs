@@ -8,12 +8,12 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AOC.Items;
+namespace AOC.Items.Geometry;
 
-public struct Point2D : IEquatable<Point2D>, IEqualityComparer<Point2D>, 
-    IAdditionOperators<Point2D, Point2D, Point2D>, ISubtractionOperators<Point2D, Point2D, Point2D>, 
+public struct Point2D : IEquatable<Point2D>, IEqualityComparer<Point2D>,
+    IAdditionOperators<Point2D, Point2D, Point2D>, ISubtractionOperators<Point2D, Point2D, Point2D>,
     IMultiplyOperators<Point2D, int, Point2D>, IDivisionOperators<Point2D, int, Point2D>, IComparable<Point2D>,
-    IPathfinderNode<Point2D> 
+    IPathfinderNode<Point2D>
 {
     public int X { get; init; }
     public int Y { get; init; }
@@ -35,13 +35,12 @@ public struct Point2D : IEquatable<Point2D>, IEqualityComparer<Point2D>,
     }
     public static bool operator ==(Point2D left, Point2D right) => left.Equals(right);
     public static bool operator !=(Point2D left, Point2D right) => !left.Equals(right);
-    public bool Equals(Point2D other) => X == other.X && Y == other.Y;
-    public bool Equals(Point2D x, Point2D y) => x.Equals(y);
-    public int GetHashCode([DisallowNull] Point2D obj) => HashCode.Combine(obj.X, obj.Y);
+    public readonly bool Equals(Point2D other) => X == other.X && Y == other.Y;
+    public readonly bool Equals(Point2D x, Point2D y) => x.Equals(y);
+    public readonly int GetHashCode([DisallowNull] Point2D obj) => HashCode.Combine(obj.X, obj.Y);
     public static implicit operator Point2D((int x, int y) v) => new(v.x, v.y);
-
     public static Point2D operator +(Point2D left, Point2D right) => (left.X + right.X, left.Y + right.Y);
-    public static Point2D operator -(Point2D left, Point2D right) => (left.X - right.X, left.Y -  right.Y);
+    public static Point2D operator -(Point2D left, Point2D right) => (left.X - right.X, left.Y - right.Y);
 
     public static Point2D operator *(int left, Point2D right) => right * left;
     public static Point2D operator *(Point2D left, int right) => (left.X * right, left.Y * right);
@@ -49,12 +48,12 @@ public struct Point2D : IEquatable<Point2D>, IEqualityComparer<Point2D>,
 
     public readonly IEnumerable<Point2D> Surrounding(bool includeSelf = false)
     {
-        for (int i = -1; i <= 1; i++)
+        for (int y = -1; y <= 1; y++)
         {
-            for (int j = -1; j <= 1; j++)
+            for (int x = -1; x <= 1; x++)
             {
-                if (i == 0 && j == 0 && !includeSelf) continue;
-                yield return (i+X, j+Y);
+                if (y == 0 && x == 0 && !includeSelf) continue;
+                yield return (X + x, Y - y);
             }
         }
     }
@@ -72,15 +71,15 @@ public struct Point2D : IEquatable<Point2D>, IEqualityComparer<Point2D>,
         yield return (South, Direction.South);
         yield return (West, Direction.West);
     }
-    public int ManhattanDistanceTo(Point2D other) => Math.Abs(other.X - X) + Math.Abs(other.Y - Y);
-    public double PythagorasDistanceTo(Point2D other)
+    public readonly int ManhattanDistanceTo(Point2D other) => Math.Abs(other.X - X) + Math.Abs(other.Y - Y);
+    public readonly double PythagorasDistanceTo(Point2D other)
     {
         double x = Math.Abs(other.X - X);
         double y = Math.Abs(other.Y - Y);
         return Math.Sqrt(x * x + y * y);
     }
-    public override string ToString() => $"({X}, {Y})";
-    internal Point2D NextIn(Direction? dir, int distance = 1)
+    public override readonly string ToString() => $"({X}, {Y})";
+    internal readonly Point2D NextIn(Direction? dir, int distance = 1)
     {
         return dir switch
         {
@@ -97,10 +96,10 @@ public struct Point2D : IEquatable<Point2D>, IEqualityComparer<Point2D>,
 
     public readonly int CompareTo(Point2D other)
     {
-        if (Y == other.Y) return X.CompareTo(other.X);
-        return -Y.CompareTo(other.Y);
+        if (Y != other.Y) return -Y.CompareTo(other.Y);
+        return X.CompareTo(other.X);
     }
-    public Direction? DirectionFrom(Point2D source)
+    public readonly Direction? DirectionFrom(Point2D source)
     {
         if (X == source.X)
         {

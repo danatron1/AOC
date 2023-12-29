@@ -88,7 +88,7 @@ public static class StringExt
         return string.Concat(a.Where((e, i) => Equals(e, b.ElementAt(i))));
     }
     public static bool ContainsNumber(this string s) => s.Any(char.IsDigit);
-    public static bool TryExtractNumberLocation(this string s, out int start, out int end)
+    private static bool TryExtractNumberLocation(this string s, out int start, out int end)
     {
         start = s.FirstIndex(char.IsDigit, out _);
         end = start;

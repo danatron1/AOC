@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AOC.Items;
+namespace AOC.Items.Geometry;
 public class Graph
 {
+    //needs redoing
+
     public HashSet<Vertex> Vertices;
     public Dictionary<string, Vertex> NamedVertices;
     public Graph()
@@ -67,7 +69,7 @@ public class Graph
         public Dictionary<Vertex, Edge> Edges;
         public object? Value;
         public string? Name;
-        public Vertex() 
+        public Vertex()
         {
             Edges = new();
         }

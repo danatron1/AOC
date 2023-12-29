@@ -1,4 +1,4 @@
-using AOC.Items;
+using AOC.Items.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -33,7 +33,7 @@ internal class D18_2023 : Day
             }
         }
         bool insidePipe = false;
-        foreach (Point2D point in grid.ScanInReadingOrder())
+        foreach (Point2D point in grid.Scan())
         {
             if (grid.ContainsPoint(point))
             {

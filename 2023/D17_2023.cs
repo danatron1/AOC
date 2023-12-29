@@ -1,5 +1,4 @@
-using AOC.Items;
-using AOC.Items.Pathfinder;
+using AOC.Items.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +20,12 @@ internal class D17_2023 : Day<int>
         Pathfinder<Point2D, int> pathfinder = grid.Pathfinder();
         pathfinder.SetStart(grid.GetCorners().TopLeft);
         pathfinder.SetTarget(grid.GetCorners().BottomRight);
-        pathfinder.CostPenalty = (p, n) => p.Cost + pathfinder.Map(n.Node);
+        pathfinder.CostPenalty = (_, n) => pathfinder.Map(n.Node);
         pathfinder.UniqueVisitHash = (n) => HashCode.Combine(n.Node, n.Memory);
         pathfinder.NodeMemoryMap = GetMemory;
         pathfinder.ConnectivityTest = ConnectivityTest;
 
-        if (pathfinder.FindPath(out var found))
+        if (pathfinder.ShortestPath(out var found))
         {
             //TraceAndPrintPath(grid, found);
             Submit(found.Cost);
@@ -81,13 +80,13 @@ internal class D17_2023 : Day<int>
         Pathfinder<Point2D, int> pathfinder = grid.Pathfinder();
         pathfinder.SetStart(grid.GetCorners().TopLeft);
         pathfinder.SetTarget(grid.GetCorners().BottomRight);
-        pathfinder.CostPenalty = (p, n) => p.Cost + pathfinder.Map(n.Node);
+        pathfinder.CostPenalty = (_, n) => pathfinder.Map(n.Node);
         pathfinder.UniqueVisitHash = (n) => HashCode.Combine(n.Node, n.Memory);
         pathfinder.NodeMemoryMap = GetMemory;
         pathfinder.ConnectivityTest = ConnectivityTest;
         pathfinder.SetTarget(x => x.Node.Equals(pathfinder.Target) && x.Memory[^minToTurn..].Distinct().Count() == 1);
 
-        if (pathfinder.FindPath(out var found))
+        if (pathfinder.ShortestPath(out var found))
         {
             TraceAndPrintPath(grid, found);
             Submit(found.Cost);

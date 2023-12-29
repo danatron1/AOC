@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AOC.Items
+namespace AOC.Items.Geometry
 { //formerly contained in Point2D
-    public enum Direction 
+    public enum Direction
     {                       //          North
         North,              //            ^
         East,               //     West < + > East
@@ -27,24 +27,38 @@ namespace AOC.Items
                 Direction.East => 'E',
                 Direction.South => 'S',
                 Direction.West => 'W',
-                _ => throw new NotImplementedException($"The ToChar case for direction {dir} is not handled."),
+                _ => throw new NotImplementedException($"The ToChar case for direction {dir} is not handled.")
             };
         }
+        const string ConvertableChars = "^><VURDLNESW";
         internal static Direction FromChar(char c)
         {
             c = char.ToUpper(c);
             return c switch
             {
                 //up
-                'U' or 'N' => Direction.North,
+                '^' or 'U' or 'N' => Direction.North,
                 //right
-                'R' or 'E' => Direction.East,
+                '>' or 'R' or 'E' => Direction.East,
                 //down
-                'D' or 'S' => Direction.South,
+                'V' or 'D' or 'S' => Direction.South,
                 //left
-                'L' or 'W' => Direction.West,
+                '<' or 'L' or 'W' => Direction.West,
                 _ => throw new NotImplementedException($"The FromChar case for char {c} is not handled."),
             };
+        }
+        internal static bool TryFromChar(char c, out Direction dir)
+        {
+            if (ConvertableChars.Contains(char.ToUpper(c)))
+            {
+                dir = FromChar(c);
+                return true;
+            }
+            else
+            {
+                dir = Direction.North;
+                return false;
+            }
         }
         public static IEnumerable<Direction> All()
         {

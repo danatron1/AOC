@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static AOC.D3_2019;
 
 namespace AOC.Y2023;
 

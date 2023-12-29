@@ -11,8 +11,9 @@ internal class D18_2015 : Day<char>
 {
     public override void PartA()
     {
+        //useExampleInput = true;
         GOL gol = new();
-        gol.grid.SetLimits(InputRaw.Length, InputRaw.Length);
+        gol.grid.SetLimits(InputRaw.Length -1, InputRaw.Length -1);
         gol.grid.SetPoints(Input2D.Select2D(c => c == '#'));
         gol.Iterate(100);
         Submit(gol.grid.GetPoints().Count());
@@ -20,7 +21,7 @@ internal class D18_2015 : Day<char>
     public override void PartB()
     {
         GOL gol = new();
-        gol.grid.SetLimits(InputRaw.Length, InputRaw.Length);
+        gol.grid.SetLimits(InputRaw.Length - 1, InputRaw.Length - 1);
         gol.grid.SetPoints(Input2D.Select2D(c => c == '#'));
         for (int i = 0; i < 100; i++)
         {

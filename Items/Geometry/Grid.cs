@@ -1,5 +1,4 @@
 ﻿using AOC.Interfaces;
-using AOC.Items.Pathfinder;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AOC.Items;
+namespace AOC.Items.Geometry;
 public class Grid<T> : ICloneable, IEnumerable<KeyValuePair<Point2D, T>> where T : notnull
 {
     internal Dictionary<Point2D, T> points = new();
@@ -51,6 +50,7 @@ public class Grid<T> : ICloneable, IEnumerable<KeyValuePair<Point2D, T>> where T
         Pathfinder<Point2D, T> pf = new();
         pf.Map = (p) => this[p];
         pf.DistanceMap = (f, t) => f.ManhattanDistanceTo(t);
+        if (this is Grid<int> intGrid) pf.CostPenalty = (_, n) => intGrid[n.Node];
         return pf;
     }
     public GridPathfinder<T> CreatePathfinder() => new(this);
@@ -77,7 +77,12 @@ public class Grid<T> : ICloneable, IEnumerable<KeyValuePair<Point2D, T>> where T
         return PointsInArea(limits.maxX, row, limits.minX, row);
     }
     public static IEnumerable<Point2D> PointsInArea((int maxX, int maxY, int minX, int minY) area) => PointsInArea(area.maxX, area.maxY, area.minX, area.minY);
-    public static IEnumerable<Point2D> PointsInArea(Point2D topLeft, Point2D bottomRight) => PointsInArea(bottomRight.X, topLeft.Y, topLeft.X, bottomRight.Y);
+    public static IEnumerable<Point2D> PointsInArea(Point2D a, Point2D b)
+    {
+        Point2D mins = (Math.Min(a.X, b.X), Math.Min(a.Y, b.Y));
+        Point2D maxs = (Math.Max(a.X, b.X), Math.Max(a.Y, b.Y));
+        return PointsInArea(maxs.X, maxs.Y, mins.X, mins.Y);
+    }
     public static IEnumerable<Point2D> PointsInArea(int maxX, int maxY, int minX, int minY)
     {
         for (int y = maxY; y >= minY; y--)
@@ -87,15 +92,6 @@ public class Grid<T> : ICloneable, IEnumerable<KeyValuePair<Point2D, T>> where T
                 yield return (x, y);
             }
         }
-    }
-    public (int maxX, int maxY, int minX, int minY) AreaBoundByCorners(Point2D pointA, Point2D pointB)
-    {
-        (int maxX, int maxY, int minX, int minY) area;
-        area.maxX = Math.Max(pointA.X, pointB.X);
-        area.maxY = Math.Max(pointA.Y, pointB.Y);
-        area.minX = Math.Min(pointA.X, pointB.X);
-        area.minY = Math.Min(pointA.Y, pointB.Y);
-        return area;
     }
     public IEnumerable<int> Columns()
     {
@@ -116,7 +112,7 @@ public class Grid<T> : ICloneable, IEnumerable<KeyValuePair<Point2D, T>> where T
     }
     public void SetPoint(Point2D p, T value)
     {
-        if (p.X >= MaxX || p.X < MinX || p.Y >= MaxY || p.Y < MinY) return;
+        if (p.X > MaxX || p.X < MinX || p.Y > MaxY || p.Y < MinY) return;
         if (points.ContainsKey(p))
         {
             if (value is null || value.Equals(DefaultValue)) points.Remove(p);
@@ -153,7 +149,7 @@ public class Grid<T> : ICloneable, IEnumerable<KeyValuePair<Point2D, T>> where T
     public T[,] To2DArray()
     {
         var limits = GetLimitsOrExtremes();
-        T[,] array = new T[1+ limits.maxX - limits.minX, 1+ limits.maxY - limits.minY];
+        T[,] array = new T[1 + limits.maxX - limits.minX, 1 + limits.maxY - limits.minY];
         foreach (Point2D item in GetPoints())
         {
             array[item.X - limits.minX, limits.maxY - item.Y] = GetPoint(item);
@@ -174,12 +170,12 @@ public class Grid<T> : ICloneable, IEnumerable<KeyValuePair<Point2D, T>> where T
         //bottom right = x, 0
         //top left = 0, x
         //top right = x, x
-        int rowNum = input.GetLength(1);
-        for (int y = 0; y < rowNum; y++)
+        Point2D max = (input.GetLength(0), input.GetLength(1));
+        for (int y = 0; y < max.Y; y++)
         {
-            for (int x = 0; x < input.GetLength(0); x++)
+            for (int x = 0; x < max.X; x++)
             {
-                SetPoint((x, rowNum - 1 - y), input[x, y]);
+                SetPoint((x, max.Y - 1 - y), input[x, y]);
             }
         }
     }
@@ -215,7 +211,7 @@ public class Grid<T> : ICloneable, IEnumerable<KeyValuePair<Point2D, T>> where T
     /// Order is the same as English text: left to right, top to bottom.
     /// </summary>
     /// <returns>yields the grid points in sequence.</returns>
-    public IEnumerable<Point2D> ScanInReadingOrder(bool includeEmptyPoints = true)
+    public IEnumerable<Point2D> Scan(bool includeEmptyPoints = true)
     {
         var limits = GetLimitsOrExtremes();
         for (int y = limits.maxY; y >= limits.minY; y--)
@@ -306,8 +302,8 @@ public class Grid<T> : ICloneable, IEnumerable<KeyValuePair<Point2D, T>> where T
             grid.SetPoint(item.Key, item.Value);
         }
         grid.DefaultValue = DefaultValue;
-        grid.MinX = MinX; 
-        grid.MaxX = MaxX; 
+        grid.MinX = MinX;
+        grid.MaxX = MaxX;
         grid.MinY = MinY;
         grid.MaxY = MaxY;
         return grid;
@@ -370,6 +366,5 @@ public class Grid<T> : ICloneable, IEnumerable<KeyValuePair<Point2D, T>> where T
             }
         }
     }
-    ///<seealso>https://en.wikipedia.org/wiki/Nonzero-rule</seealso>
 }
 

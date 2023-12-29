@@ -1,4 +1,4 @@
-using AOC.Items;
+using AOC.Items.Geometry;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections;
@@ -47,7 +47,7 @@ internal class D16_2023 : Day<char>
         {
             if (to is null) return;
             Direction? dir = to.Value.DirectionFrom(from);
-            energised.UnionWith(Grid<char>.PointsInArea(grid.AreaBoundByCorners(from.NextIn(dir), to.Value)));
+            energised.UnionWith(Grid<char>.PointsInArea(from.NextIn(dir), to.Value));
             AddEnergisedFrom(to.Value, dir);
         }
         Point2D NextRelevantPoint(Point2D start, Direction direction)

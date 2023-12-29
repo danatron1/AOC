@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using AOC.Items.Geometry;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Numerics;
@@ -437,9 +438,10 @@ public static class ArrayExt
     public static TResult[,] Select2D<TSource, TResult>(this TSource[,] array, Func<TSource, TResult> predicate)
     {
         TResult[,] result = new TResult[array.GetLength(0), array.GetLength(1)];
-        for (int x = array.GetLowerBound(0); x < array.GetUpperBound(0); x++)
+        Point2D upper = (array.GetUpperBound(0), array.GetUpperBound(1));
+        for (int x = array.GetLowerBound(0); x <= upper.X; x++)
         {
-            for (int y = array.GetLowerBound(1); y < array.GetUpperBound(1); y++)
+            for (int y = array.GetLowerBound(1); y <= upper.Y; y++)
             {
                 result[x, y] = predicate.Invoke(array[x, y]);
             }
@@ -545,5 +547,10 @@ public static class ArrayExt
     public static IEnumerable<T> Top<T>(this IEnumerable<T> source, int count) => source.OrderDescending().Take(count);
     public static IEnumerable<T> Bottom<T>(this IEnumerable<T> source, int count) => source.Order().Take(count);
     public static T LCM<T>(this IEnumerable<T> values) where T : INumber<T> => values.Aggregate(T.One, IntExt.LCM<T>);
+    public static long LCMAsLong(this IEnumerable<int> values) => values.Select(i => (long)i).LCM();
     public static T GCF<T>(this IEnumerable<T> values) where T : INumber<T> => values.Aggregate(T.Zero, IntExt.GCF<T>);
+    public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+    {
+        foreach (T item in source) action(item);
+    }
 }

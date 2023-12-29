@@ -6,16 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AOC.Items
+namespace AOC.Items.Geometry
 {
+    //obsolete - use Pathfinder instead
     public class GridPathfinder<T> where T : notnull
     {
         public Grid<T> Grid;
         private Point2D? Target;
         public delegate bool TileConnectionRule(T from, T to, Direction dir);
-        public TileConnectionRule TileConnectivityTest = (_,_,_) => true;
+        public TileConnectionRule TileConnectivityTest = (_, _, _) => true;
         public delegate bool TravellerConnectionRule(PathfinderPoint2D from, PathfinderPoint2D to, Direction dir);
-        public TravellerConnectionRule TravellerConnectivityTest = (_,_,_) => true;
+        public TravellerConnectionRule TravellerConnectivityTest = (_, _, _) => true;
         public delegate bool VictoryRule(Point2D on);
         public VictoryRule VictoryTest;
         public delegate bool RemoveOldPathRule(PathfinderPoint2D oldPoint, PathfinderPoint2D newPoint);

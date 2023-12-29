@@ -20,6 +20,7 @@ public abstract class DayBase<InputType> : IDayBase
     public string Name { get; init; }
     public string NameSpace => $"AOC.Y{Year}";
     public bool useExampleInput = false;
+    public bool OnPartB { get; private set; }
     public long? Minimum => GetPart() == 1 ? MinimumA : MinimumB;
     public long? Maximum => GetPart() == 1 ? MaximumA : MaximumB;
     private long? MinimumA, MinimumB, MaximumA, MaximumB;
@@ -212,6 +213,7 @@ public abstract class DayBase<InputType> : IDayBase
         Stopwatch sw = Stopwatch.StartNew();
         try
         {
+            OnPartB = false;
             PrintSolveBeginMessage("A");
             PartASetup();
             PartA();
@@ -229,6 +231,7 @@ public abstract class DayBase<InputType> : IDayBase
         useExampleInput = false;
         try
         {
+            OnPartB = true;
             PrintSolveBeginMessage("B");
             PartBSetup();
             PartB();
@@ -326,6 +329,7 @@ public abstract class DayBase<InputType> : IDayBase
             {
                 Console.WriteLine($"First time using example inputs for {d}.\nCreated file at {pathFull}");
                 input = Utility.GetUserInputs(pathFull);
+                Console.WriteLine($"Example input captured!");
             }
             else input = File.ReadAllLines(pathFull);
         }

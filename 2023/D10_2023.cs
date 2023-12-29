@@ -1,4 +1,4 @@
-﻿using AOC.Items;
+﻿using AOC.Items.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,7 +79,7 @@ internal class D10_2023 : Day<char>
         HashSet<Point2D> pipePoints = nodes.Select(x => x.Point).ToHashSet();
         int enclosed = 0;
         bool insidePipe = false;
-        foreach (Point2D point in grid.ScanInReadingOrder()) //left to right, top to bottom
+        foreach (Point2D point in grid.Scan()) //left to right, top to bottom
         {
             if (pipePoints.Contains(point))
             {
