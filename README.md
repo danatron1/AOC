@@ -1,6 +1,7 @@
 # AOC
 
 This is a personal helper tool designed by danatron1 (me) to assist with [Advent of Code](https://adventofcode.com) puzzles. 
+I've participated annually in AOC since 2019, although some older puzzle solutions aren't in this repo - this is because prior to creating this project, I began by solving puzzles as individual projects. Solutions for puzzles prior to 2019 are me going back to previous years and solving them for fun :]
 
 ## Notes on automation: 
 
