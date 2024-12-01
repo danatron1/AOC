@@ -47,6 +47,15 @@ public static class WebsiteInteraction
     {
         string pathFull = $@"{Utility.folderPath}\Inputs\{d.Year}\{d}_Input.txt";
         string result = await GetContent($"/{d.Year}/day/{d.Day}/input");
+        if (result.Contains("Puzzle inputs differ by user.  Please log in to get your puzzle input."))
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Not logged in - cannot get puzzle input.");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("To get log in token, go to the application tab (chrome) or the storage tab (firefox)");
+            Console.WriteLine("paste your token in \"sessionInfo.txt\" and try again.");
+            return Array.Empty<string>();
+        }
         await File.WriteAllTextAsync(pathFull, result);
         return File.ReadAllLines(pathFull);
     }

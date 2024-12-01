@@ -577,7 +577,7 @@ public abstract class DayBase<InputType> : IDayBase
             if (lastLog[2] == "Correct")
             {
                 Console.WriteLine($"You've previously solved this puzzle! The correct answer was {lastLog[1]}.");
-                if (lastLog[1] == answer) Console.WriteLine("Well done on getting it right again :)");
+                if (lastLog[1] == answer) Console.WriteLine("Well done on getting it right again :D");
                 else Console.WriteLine($"Unfortunately... this means {answer} is not correct");
                 return "Already solved";
             }

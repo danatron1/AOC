@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Numerics;
+using System.Threading.Channels;
 
 public static class ArrayExt
 {
@@ -378,6 +379,10 @@ public static class ArrayExt
             }
         }
         return jaggedArray;
+    }
+    public static void PrintArray(this IEnumerable array, string separator = ", ", bool dontSplitStrings = true)
+    {
+        Console.WriteLine(array.ToContentString(separator, dontSplitStrings));
     }
     public static string ToContentString<T>(this T[,] array2D, string separator = ", ")
     {
