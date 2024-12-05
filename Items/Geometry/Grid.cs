@@ -1,14 +1,5 @@
-﻿using AOC.Interfaces;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections;
 using System.Data;
-using System.Data.SqlTypes;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AOC.Items.Geometry;
 public class Grid<T> : ICloneable, IEnumerable<KeyValuePair<Point2D, T>> where T : notnull
