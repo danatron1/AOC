@@ -8,9 +8,9 @@ namespace AOC
 {
     internal class D9_2021 : Day
     {
-        public override void Solve() => PartB();
+        public override void Solve() => PartTwo();
         byte[,] caveMap;
-        public override void PartA()
+        public override void PartOne()
         {
             GetCaveMap();
             int riskLevel = 0;
@@ -41,7 +41,7 @@ namespace AOC
             }
         }
 
-        public override void PartB()
+        public override void PartTwo()
         {
             GetCaveMap();
             List<XY> lowPoints = new List<XY>();

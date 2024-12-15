@@ -9,8 +9,8 @@ namespace AOC
 {
     internal class D6_2021 : Day
     {
-        public override void Solve() => PartB();
-        public override void PartA()
+        public override void Solve() => PartTwo();
+        public override void PartOne()
         {
             LoadFishData();
             AdvanceDays(80);
@@ -21,7 +21,7 @@ namespace AOC
             public int price;
             public Test(int i) => price = i;
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             Test[] tests =
             {

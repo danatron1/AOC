@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 public static class WebsiteInteraction
 {
     public const string website = "https://adventofcode.com";
+    public const int secondsBetweenSubmissions = 61;
     public const string sessionInfoFilepath = @$"{Utility.folderPath}\sessionInfo.txt";
     //Find your session cookie by going to adventofcode.com, pressing F12, going to the application tab, and copying the value of "session"
     public static string Cookie => SessionInfo["cookie"];
@@ -39,21 +40,18 @@ public static class WebsiteInteraction
         }
         foreach (string line in MANDATORY)
         {
-            if (!info.ContainsKey(line)) throw new Exception($"Missing mandatory field {line} in session info file: {sessionInfoFilepath}");
+            if (!info.ContainsKey(line)) throw new Exception(Canned.Exceptions.MissingFieldInSessionFile(line, sessionInfoFilepath));
         }
         return info;
     }
-    public static async Task<string[]> DownloadAOCInput<T>(DayBase<T> d)
+    public static string AddressForDay(IDay d) => $"{website}/{d.Year}/day/{d.Day}";
+    public static async Task<string[]> DownloadAOCInput(IDay d)
     {
         string pathFull = $@"{Utility.folderPath}\Inputs\{d.Year}\{d}_Input.txt";
         string result = await GetContent($"/{d.Year}/day/{d.Day}/input");
-        if (result.Contains("Puzzle inputs differ by user.  Please log in to get your puzzle input."))
+        if (result.Contains(Canned.WebsiteResponse.PuzzleInputsDifferByUser))
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Not logged in - cannot get puzzle input.");
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine("To get log in token, go to the application tab (chrome) or the storage tab (firefox)");
-            Console.WriteLine("paste your token in \"sessionInfo.txt\" and try again.");
+            Canned.PrintParagraph.CannotGetPuzzleInput();
             return Array.Empty<string>();
         }
         await File.WriteAllTextAsync(pathFull, result);

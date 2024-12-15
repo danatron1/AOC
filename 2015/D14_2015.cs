@@ -30,11 +30,11 @@ namespace AOC
             }
         }
         const int time = 2503;
-        public override void PartA()
+        public override void PartOne()
         {
             Submit(Input.Select(c => (new Reindeer(c)).DistanceAt(time)).Max());
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             Reindeer[] deer = Input.Select(c => new Reindeer(c)).ToArray();
             Submit(Enumerable.Range(1, time).Select(i => deer.MaxBy(d => d.DistanceAt(i))).Mode(v => v.name).count);

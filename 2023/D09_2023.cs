@@ -30,11 +30,11 @@ internal class D09_2023 : Day
             if (!allZero) differences = new Sequence(elements.SelectWithPrevious((prev, curr) => curr - prev).ToArray());
         }
     }
-    public override void PartA()
+    public override void PartOne()
     {
         Submit(Input.Select(x => new Sequence(x.ExtractNumbers<int>())).Sum(x => x.PredictNext()));
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         Submit(Input.Select(x => new Sequence(x.ExtractNumbers<int>())).Sum(x => x.PredictPrevious()));
     }

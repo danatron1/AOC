@@ -74,13 +74,13 @@ internal class D11_2022 : Day
             }
         }
     }
-    public override void PartA()
+    public override void PartOne()
     {
         Monkey.Initialize(InputBlocks);
         for (int i = 0; i < 20; i++) Monkey.PerformRound(3);
         Submit(Monkey.Monkeys.Select(m => m.Inspections).Top(2).Mul());
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         Monkey.Initialize(InputBlocks);
         for (int i = 0; i < 10_000; i++) Monkey.PerformRound(1);

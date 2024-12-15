@@ -9,7 +9,7 @@ namespace AOC.Y2018;
 
 internal class D04_2018 : Day
 {
-    public override void PartA()
+    public override void PartOne()
     {
         //sort data
         List<GuardTime> guardTimes = new();
@@ -44,7 +44,7 @@ internal class D04_2018 : Day
         Console.WriteLine($"Guard {sleepiestGuard} slept the most");
 
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         throw new NotImplementedException();
     }

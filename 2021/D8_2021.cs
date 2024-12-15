@@ -9,8 +9,8 @@ namespace AOC
 {
     internal class D8_2021 : Day
     {
-        public override void Solve() => PartB();
-        public override void PartA()
+        public override void Solve() => PartTwo();
+        public override void PartOne()
         {
             string[] input = GetInputForDay();
             int count = 0;
@@ -94,7 +94,7 @@ namespace AOC
             }
             return answers.ToArray();
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();

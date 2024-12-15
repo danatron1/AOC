@@ -64,12 +64,12 @@ internal class D13_2023 : Day
             return 0;
         }
     }
-    public override void PartA()
+    public override void PartOne()
     {
         Mirror[] mirrors = InputBlocks.Select(x => new Mirror(x)).ToArray();
         Submit(mirrors.Sum(x => x.SymmetryLine()));
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         Mirror[] mirrors = InputBlocks.Select(x => new Mirror(x)).ToArray();
         Submit(mirrors.Sum(x => x.SymmetryLine(true)));

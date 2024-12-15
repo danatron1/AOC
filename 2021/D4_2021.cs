@@ -8,9 +8,9 @@ namespace AOC
 {
     internal class D4_2021 : Day
     {
-        public override void Solve() => PartB();
+        public override void Solve() => PartTwo();
 
-        public override void PartA()
+        public override void PartOne()
         {
             EstablishBoards();
             foreach (int num in numbersToDraw)
@@ -20,7 +20,7 @@ namespace AOC
             Console.WriteLine(BingoBoard.mostRecentWin);
         }
 
-        public override void PartB()
+        public override void PartTwo()
         {
             EstablishBoards();
             int lastWinCount = 0;

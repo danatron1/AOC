@@ -95,7 +95,7 @@ namespace AOC
                 Console.WriteLine("Total dots: " + totalDots);
             }
         }
-        public override void PartA()
+        public override void PartOne()
         {
             //825 too high
             string[] input = GetInputForDay();
@@ -116,11 +116,11 @@ namespace AOC
             }
         }
 
-        public override void PartB()
+        public override void PartTwo()
         {
             throw new NotImplementedException();
         }
 
-        public override void Solve() => PartA();
+        public override void Solve() => PartOne();
     }
 }

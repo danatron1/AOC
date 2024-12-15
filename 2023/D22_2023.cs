@@ -155,7 +155,7 @@ internal class D22_2023 : Day
             return 'A' + (Array.IndexOf(bricks, topBrick) % 26);
         }
     }
-    public override void PartA()
+    public override void PartOne()
     {
         useExampleInput = true;
         Stopwatch sw = Stopwatch.StartNew();
@@ -176,7 +176,7 @@ internal class D22_2023 : Day
         }
         Submit(bricks.Count(x => x.supporting.All(y => y.supportedBy > 1)));
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         throw new NotImplementedException();
     }

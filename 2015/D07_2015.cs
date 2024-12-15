@@ -11,12 +11,12 @@ namespace AOC
 {
     internal class D07_2015 : Day
     {
-        public override void PartA()
+        public override void PartOne()
         {
             SetupCircuit();
             Submit(Wire.GetValueOf("a"));
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             SetupCircuit();
             ushort aValue = Wire.GetValueOf("a");

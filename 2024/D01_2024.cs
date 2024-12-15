@@ -21,12 +21,12 @@ internal class D01_2024 : Day
         }
         return output;
     }
-    public override void PartA()
+    public override void PartOne()
     {
         (int[] left, int[] right) = GetLocationIDs(true);
         Submit(left.Select((l, i) => Math.Abs(l - right[i])).Sum());
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         (int[] left, int[] right) = GetLocationIDs(false);
         Tally<int> rightCounts = right.ToTally();

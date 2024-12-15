@@ -10,7 +10,7 @@ namespace AOC.Y2022
 {
     internal class D12_2022 : Day<char>
     {
-        public override void PartA()
+        public override void PartOne()
         {
             Grid<char> grid = new(Input2D);
             Point2D start = grid.FindPoint('S')!.Value;
@@ -32,7 +32,7 @@ namespace AOC.Y2022
             else Console.WriteLine("No solution found");
             grid.PrintBoard();
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             Grid<char> grid = new(Input2D);
             Point2D start = grid.FindPoint('E')!.Value;

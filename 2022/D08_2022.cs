@@ -9,7 +9,7 @@ namespace AOC.Y2022
 {
     internal class D08_2022 : Day<int>
     {
-        public override void PartA()
+        public override void PartOne()
         {
             Grid<int> forest = new(Input2D, -1);
             Submit(forest.Count(t => VisibleFromEdge(forest, t)));
@@ -27,7 +27,7 @@ namespace AOC.Y2022
             }
             return false;
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             Grid<int> forest = new(Input2D, -1);
             Submit(forest.Max(t => ScenicScore(forest, t)));

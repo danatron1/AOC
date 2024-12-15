@@ -7,12 +7,12 @@ namespace AOC.Y2024;
 
 internal class D05_2024_FailedAttempt : Day
 {
-    public override void PartA()
+    public override void PartOne()
     {
         Page.OrderRules = InputBlocks[0];
         Submit(InputBlocks[1].Select(Pages).Where(IsCorrectOrder).Select(Middle).Sum());
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         Page.OrderRules = InputBlocks[0];
         Submit(InputBlocks[1].Select(Pages).Where(IsIncorrectOrder).Select(CorrectOrder).Select(Middle).Sum());

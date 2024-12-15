@@ -8,7 +8,7 @@ namespace AOC.Y2015;
 
 internal class D24_2015 : Day<int>
 {
-    public override void PartA()
+    public override void PartOne()
     {
         return;
 
@@ -39,7 +39,7 @@ internal class D24_2015 : Day<int>
         }
         Submit(lowestQE);
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         int searched = 0, weightToMatch = Input.Sum() / 4;
         long smallestGroup = long.MaxValue, lowestQE = long.MaxValue;

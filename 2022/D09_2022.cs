@@ -55,7 +55,7 @@ namespace AOC.Y2022
             }
             return Path;
         }
-        public override void PartA()
+        public override void PartOne()
         {
             Rope head = new(null);
             Rope tail = new(head);
@@ -80,7 +80,7 @@ namespace AOC.Y2022
 
             Submit(Path.Count);
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             HashSet<Point2D> visited = SimulateRope(10);
             Grid<bool> drawnPath = new(true, visited);

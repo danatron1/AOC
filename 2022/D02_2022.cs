@@ -8,7 +8,7 @@ namespace AOC.Y2022
 {
     internal class D02_2022 : Day
     {
-        public override void PartA()
+        public override void PartOne()
         {
             //Explanation:
             //First I calculate the result. The result is either 0, 3, or 6 for a loss, draw, or win respectively.
@@ -24,7 +24,7 @@ namespace AOC.Y2022
             //which effectively counts the number of characters after W that that letter is, which gives me the score.
             Submit(Input.Sum(x => (2 + x[2] - x[0]) % 3 * 3 + x[2] - 'W'));
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             //Explanation:
             //Similar strategy to above. I already know the outcome (x[2]) so I just convert that into 0, 1, or 2 by subtracting X

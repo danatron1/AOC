@@ -9,7 +9,7 @@ namespace AOC.Y2023;
 
 internal class D12_2023 : Day
 {
-    public override void PartA()
+    public override void PartOne()
     {
         // 7 3 1
         // 7 << ? + 3 << ? + 1 << ?
@@ -100,7 +100,7 @@ internal class D12_2023 : Day
             yield return $"{split[0]} {split[1]}";
         }
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         long sum = 0;
         string line = ".??.??#?. 2,3";

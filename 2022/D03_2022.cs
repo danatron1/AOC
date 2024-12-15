@@ -8,7 +8,7 @@ namespace AOC.Y2022
 {
     internal class D03_2022 : Day
     {
-        public override void PartA()
+        public override void PartOne()
         {
             int sum = 0;
             foreach (var item in Input)
@@ -26,7 +26,7 @@ namespace AOC.Y2022
             }
             Submit(sum);
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             int sum = 0;
             for (int i = 0; i < Input.Length; i+=3)

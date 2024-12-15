@@ -9,7 +9,7 @@ namespace AOC
 {
     internal class D15_2015 : Day
     {
-        public override void PartA()
+        public override void PartOne()
         {
             int bestScore = 0;
             foreach (IEnumerable<int> spoonDistribution in 100.SplitToChunks(Input.Length).ToArray())
@@ -27,7 +27,7 @@ namespace AOC
             }
             Submit(bestScore);
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             int bestScore = 0;
             foreach (IEnumerable<int> spoonDistribution in 100.SplitToChunks(Input.Length).ToArray())

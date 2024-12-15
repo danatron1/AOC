@@ -8,8 +8,8 @@ namespace AOC
 {
     internal class D2_2021 : Day
     {
-        public override void Solve() => PartB();
-        public override void PartA()
+        public override void Solve() => PartTwo();
+        public override void PartOne()
         {
             string[] input = GetInputForDay(); //get input
             int horizontal = 0;
@@ -33,7 +33,7 @@ namespace AOC
             }
             Submit(horizontal * depth); //copy result to clipboard
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             string[] input = GetInputForDay(); //get input
             int aim = 0;

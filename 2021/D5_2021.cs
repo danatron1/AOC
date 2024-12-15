@@ -8,8 +8,8 @@ namespace AOC
 {
     internal class D5_2021 : Day
     {
-        public override void Solve() => PartB();
-        public override void PartA()
+        public override void Solve() => PartTwo();
+        public override void PartOne()
         {
             string[] input = GetInputForDay();
             Tally<string> tally = new Tally<string>();
@@ -48,7 +48,7 @@ namespace AOC
             Copy(tally.Count(o => tally[o] > 1));
         }
 
-        public override void PartB()
+        public override void PartTwo()
         {
             Tally<string> tally = new Tally<string>();
             string[] input = GetInputForDay();

@@ -18,7 +18,7 @@ internal class D24_2023 : Day
             else return a;
         }
     }
-    public override void PartA()
+    public override void PartOne()
     {
         Console.WriteLine("\n\n\n");
 
@@ -27,7 +27,7 @@ internal class D24_2023 : Day
             Console.WriteLine(x == x);
         }
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         throw new NotImplementedException();
     }

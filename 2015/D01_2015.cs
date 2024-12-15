@@ -8,14 +8,14 @@ namespace AOC
 {
     internal class D01_2015 : Day
     {
-        public override void PartA()
+        public override void PartOne()
         {
             string input = GetInputForDay()[0]; //get puzzle input
             int floor = input.Count(c => c == '(') - input.Count(c => c == ')'); //solve
             Copy(floor); //copy answer to clipboard
             Submit(floor);
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             string input = GetInputForDay()[0]; //get puzzle input
             int floor = 0;

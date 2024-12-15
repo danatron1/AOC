@@ -8,8 +8,8 @@ namespace AOC
 {
     internal class D10_2021 : Day
     {
-        public override void Solve() => PartB();
-        public override void PartA()
+        public override void Solve() => PartTwo();
+        public override void PartOne()
         {
             string chunkOpen = "([{<";
             string chunkClose = ")]}>";
@@ -41,7 +41,7 @@ namespace AOC
             Copy(corruptedScore);
         }
 
-        public override void PartB()
+        public override void PartTwo()
         {
             string chunkOpen = "([{<";
             string chunkClose = ")]}>";

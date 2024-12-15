@@ -13,7 +13,7 @@ namespace AOC
 {
     internal class D12_2015 : Day<JToken>
     {
-        public override void PartA()
+        public override void PartOne()
         {
             Submit(GetSum(InputLine));
         }
@@ -24,7 +24,7 @@ namespace AOC
             if (t is JObject o && o.Properties().Any(j => j.Value.ToString() == skip)) return 0;
             return t.Children().Sum(x => GetSum(x, skip));
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             Submit(GetSum(InputLine, "red"));
         }

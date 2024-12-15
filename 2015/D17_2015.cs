@@ -9,11 +9,11 @@ namespace AOC.Y2015;
 
 internal class D17_2015 : Day<int>
 {
-    public override void PartA()
+    public override void PartOne()
     {
         Submit(Input.Combinations().Where(x => x.Sum() == 150).Count());
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         int len = Input.Combinations().Where(x => x.Sum() == 150).Shortest().Count();
         Submit(Input.Combinations().Where(x => x.Sum() == 150 && x.Count() == len).Count());

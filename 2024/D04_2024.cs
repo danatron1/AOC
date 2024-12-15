@@ -21,7 +21,7 @@ internal class D04_2024 : Day<char>
     }
 
     const string XMAS = "XMAS";
-    public override void PartA()
+    public override void PartOne()
     {
         Grid<char> grid = new(Input2D);
 
@@ -39,7 +39,7 @@ internal class D04_2024 : Day<char>
         Submit(points.Count());
     }
 
-    public override void PartB()
+    public override void PartTwo()
     {
         Grid<char> grid = new(Input2D);
 

@@ -8,7 +8,7 @@ namespace AOC.Y2022
 {
     internal class D10_2022 : Day
     {
-        public override void PartA()
+        public override void PartOne()
         {
             int clock = 0, sum = 0, X = 1;
             foreach (string row in Input)
@@ -24,7 +24,7 @@ namespace AOC.Y2022
             }
             Submit(sum);
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             int clock = 0, X = 1;
             string line = "";

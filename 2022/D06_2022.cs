@@ -16,11 +16,11 @@ namespace AOC.Y2022
             }
             return -1;
         }
-        public override void PartA()
+        public override void PartOne()
         {
             Submit(PacketDetector(4));
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             Submit(PacketDetector(14));
         }

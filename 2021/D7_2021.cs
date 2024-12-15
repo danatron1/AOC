@@ -8,9 +8,9 @@ namespace AOC
 {
     internal class D7_2021 : Day
     {
-        public override void Solve() => PartA();
+        public override void Solve() => PartOne();
         int[] input;
-        public override void PartA()
+        public override void PartOne()
         {
             input = Array.ConvertAll(GetInputForDay()[0].Split(','), int.Parse);
             Array.Sort(input);
@@ -73,7 +73,7 @@ namespace AOC
             }
             return (int)sumOfDistances;
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             input = Array.ConvertAll(GetInputForDay()[0].Split(','), int.Parse);
             int target = (int)GeometricMedianExp(0.000000001);

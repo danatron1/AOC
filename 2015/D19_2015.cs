@@ -4,7 +4,7 @@ internal class D19_2015 : Day
     List<(string, string)> transformations = new();
     string start = "e"; 
     string target;
-    public override void PartASetup()
+    public override void PartOneSetup()
     {
         target = Input[^1];
         for (int i = 0; i < Input.Length - 2; i++)
@@ -18,7 +18,7 @@ internal class D19_2015 : Day
         Utility.RefSwap(ref start, ref target);
         transformations = transformations.Select(x => (x.Item2, x.Item1)).ToList();
     }
-    public override void PartA()
+    public override void PartOne()
     {
         Submit(NextSteps(target).Distinct().Count());
     }
@@ -39,7 +39,7 @@ internal class D19_2015 : Day
             if (current.Contains(From)) yield return (From, To);
         }
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         InvertDirection();
         int lowestSeen = int.MaxValue, stepsToReach = 0, iterations = 0;

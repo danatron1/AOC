@@ -87,7 +87,7 @@ internal class D05_2023 : Day
             return new SeedRange[] { pass };
         }
     }
-    public override void PartA()
+    public override void PartOne()
     {
         List<Conversion> conversions = new();
         foreach (string[] block in InputBlocks.Skip(1))
@@ -117,7 +117,7 @@ internal class D05_2023 : Day
             return new SeedRange(start + effect, end + effect);
         }
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         List<Conversion> conversions = new();
         foreach (string[] block in InputBlocks.Skip(1))

@@ -9,12 +9,12 @@ namespace AOC.Y2024;
 
 internal class D02_2024 : Day
 {
-    public override void PartA()
+    public override void PartOne()
     {
         var reports = Input.Select(x => x.ExtractNumbers<int>());
         Submit(reports.Select(Differences).Where(SafeReport).Count());
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         var reports = Input.Select(x => x.ExtractNumbers<int>());
         Submit(reports.Where(SafeWithProblemDampener).Count());

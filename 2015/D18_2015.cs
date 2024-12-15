@@ -9,7 +9,7 @@ namespace AOC.Y2015;
 
 internal class D18_2015 : Day<char>
 {
-    public override void PartA()
+    public override void PartOne()
     {
         //useExampleInput = true;
         GOL gol = new();
@@ -18,7 +18,7 @@ internal class D18_2015 : Day<char>
         gol.Iterate(100);
         Submit(gol.grid.GetPoints().Count());
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         GOL gol = new();
         gol.grid.SetLimits(InputRaw.Length - 1, InputRaw.Length - 1);

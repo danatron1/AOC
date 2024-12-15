@@ -73,7 +73,7 @@ internal class D19_2023 : Day
             yield return range;
         }
     }
-    public override void PartA()
+    public override void PartOne()
     {
          useExampleInput = true;
         Dictionary<string, Workflow> workflows = new();
@@ -113,7 +113,7 @@ internal class D19_2023 : Day
         public long Combinations() => mins.Zip(maxs).Select(x => 1 + x.Second - x.First).MulAsLong();
         public bool Exists() => mins.Zip(maxs).All(x => x.First <= x.Second);
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         //useExampleInput = true;
         Dictionary<string, Workflow> workflows = new();

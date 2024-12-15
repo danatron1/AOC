@@ -38,7 +38,7 @@ internal class D08_2023 : Day
             nodeFinder[name] = this;
         }
     }
-    public override void PartA()
+    public override void PartOne()
     {
         for (int i = 2; i < Input.Length; i++)
         {
@@ -53,11 +53,11 @@ internal class D08_2023 : Day
         }
         Submit(steps);
     }
-    public override void PartBSetup()
+    public override void PartTwoSetup()
     {
         Node.nodeFinder = new Dictionary<string, Node>();
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         for (int i = 2; i < Input.Length; i++)
         {

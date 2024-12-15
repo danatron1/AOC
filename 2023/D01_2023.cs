@@ -9,7 +9,7 @@ namespace AOC.Y2023;
 internal class D01_2023 : Day
 {
 
-    public override void PartA()
+    public override void PartOne()
     {
         int sum = 0;
         foreach (string line in Input)
@@ -19,7 +19,7 @@ internal class D01_2023 : Day
         }
         Submit(sum);
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         string[] numbers = new string[]
         {

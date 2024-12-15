@@ -15,7 +15,7 @@ internal class D11_2023 : Day<char>
     {
         return (emptyColumns.Count(x => x < point.X), emptyRows.Count(y => y < point.Y));
     }
-    public override void PartA()
+    public override void PartOne()
     {
         //useExampleInput = true;
         Grid<char> grid = new Grid<char>(Input2D, '.');
@@ -24,7 +24,7 @@ internal class D11_2023 : Day<char>
         IEnumerable<Point2D> points = grid.GetPoints().Select(p => p + GalacticCell(emptyC, emptyR, p));
         Submit(points.PairsAlt().Sum(p => p.First().ManhattanDistanceTo(p.Last())));
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         //useExampleInput = true;
         Grid<char> grid = new Grid<char>(Input2D, '.');

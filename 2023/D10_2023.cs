@@ -18,7 +18,7 @@ internal class D10_2023 : Day<char>
         {'L', "└"},
         {'J', "┘"}
     };
-    public override void PartA()
+    public override void PartOne()
     {
         //useExampleInput = true;
         Grid<char> grid = new Grid<char>(Input2D, '.');
@@ -66,7 +66,7 @@ internal class D10_2023 : Day<char>
         if (south && west) return '7';
         return 'S';
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         Grid<char> grid = new Grid<char>(Input2D, '.');
         grid.printedRepresentation = pipeCharacters;

@@ -2,7 +2,7 @@ namespace AOC.Y2024;
 
 internal class D05_2024 : Day
 {
-    public override void PartA()
+    public override void PartOne()
     {
         FunkySorter sorter = new(InputBlocks[0]);
         int sum = 0;
@@ -13,7 +13,7 @@ internal class D05_2024 : Day
         }
         Submit(sum);
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         FunkySorter sorter = new(InputBlocks[0]);
         int sum = 0;

@@ -9,7 +9,7 @@ namespace AOC.Y2022
 {
     internal class D05_2022 : Day
     {
-        public override void PartA()
+        public override void PartOne()
         {
             //initialize the starting positions
             Stack<char>[] stacks = new Stack<char>[(int)InputBlocks[0][^1].ExtractNumbers().Max()];
@@ -38,7 +38,7 @@ namespace AOC.Y2022
             string code = new string(stacks.Select(x => x.Peek()).ToArray());
             Submit(code);
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             //initialize the starting positions
             Stack<char>[] stacks = new Stack<char>[(int)InputBlocks[0][^1].ExtractNumbers().Max() + 1];

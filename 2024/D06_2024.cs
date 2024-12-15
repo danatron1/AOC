@@ -10,7 +10,7 @@ namespace AOC.Y2024;
 
 internal class D06_2024 : Day<char>
 {
-    public override void PartA()
+    public override void PartOne()
     {
         Grid<char> grid = new(Input2D);
         Point2D start = grid.FirstOrDefault(c => c.Value == '^').Key;
@@ -27,7 +27,7 @@ internal class D06_2024 : Day<char>
         }
         Submit(visitedPoints.Count);
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         Walker.Grid = new(Input2D);
         Queue<Walker> walkers = new();

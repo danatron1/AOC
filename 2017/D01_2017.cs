@@ -2,11 +2,11 @@ namespace AOC.Y2017;
 
 internal class D01_2017 : Day
 {
-    public override void PartA()
+    public override void PartOne()
     {
         Submit(InputLine.Select((x, i) => x == ValueAhead(i) ? (x - '0') : 0).Sum());
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         Submit(InputLine.Select((x, i) => x == ValueAhead(i, InputLine.Length / 2) ? (x - '0') : 0).Sum());
     }

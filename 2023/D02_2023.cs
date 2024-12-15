@@ -51,12 +51,12 @@ internal class D02_2023 : Day
         }
         return game;
     }
-    public override void PartA()
+    public override void PartOne()
     {
         List<Game> games = Input.Select(GetGameFromLine).ToList();
         Submit(games.Where(g => g.PossibleWith(red: 12, green: 13, blue: 14)).Sum(x => x.ID));
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         List<Game> games = Input.Select(GetGameFromLine).ToList();
         Submit(games.Sum(x => x.GetPower()));

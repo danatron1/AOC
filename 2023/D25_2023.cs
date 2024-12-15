@@ -8,11 +8,11 @@ namespace AOC.Y2023;
 
 internal class D25_2023 : Day
 {
-    public override void PartA()
+    public override void PartOne()
     {
         throw new NotImplementedException();
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         throw new NotImplementedException();
     }

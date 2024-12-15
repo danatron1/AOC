@@ -8,7 +8,7 @@ namespace AOC
 {
     internal class D11_2015 : Day
     {
-        public override void PartA()
+        public override void PartOne()
         {
             long input = NumberFromPassword(GetInputForDay()[0]);
             while (!Valid(PasswordFromNumber(++input))) ;
@@ -54,7 +54,7 @@ namespace AOC
             }
             return false;
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             long input = NumberFromPassword(GetInputForDay()[0]);
             while (!Valid(PasswordFromNumber(++input))) ;

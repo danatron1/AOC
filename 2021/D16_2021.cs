@@ -119,7 +119,7 @@ namespace AOC
             }
 
         }
-        public override void PartA()
+        public override void PartOne()
         {
             //3  5
             byte test = 0b01110110;
@@ -149,12 +149,12 @@ namespace AOC
             return output;
             int GetHexVal(char hex) => hex - (hex < 58 ? 48 : 55);
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             throw new NotImplementedException();
         }
 
-        public override void Solve() => PartA();
+        public override void Solve() => PartOne();
         public int Double(int x) => x * 2;
     }
 }

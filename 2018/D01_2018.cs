@@ -8,11 +8,11 @@ namespace AOC.Y2018;
 
 internal class D01_2018 : Day<int>
 {
-    public override void PartA()
+    public override void PartOne()
     {
         Submit(Input.Sum());
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         Submit(Input.LoopForever().AggregateSteps((a, b) => a + b).Duplicates().First());
     }

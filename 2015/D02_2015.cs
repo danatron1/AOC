@@ -18,12 +18,12 @@ namespace AOC
             }
             return presents;
         }
-        public override void PartA()
+        public override void PartOne()
         {
             int total = GetPresents().Sum(x => x.paperNeeded);
             Submit(total);
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             int total = GetPresents().Sum(x => x.ribbonNeeded);
             Submit(total);

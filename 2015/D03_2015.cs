@@ -8,7 +8,7 @@ namespace AOC
 {
     internal class D03_2015 : Day
     {
-        public override void PartA()
+        public override void PartOne()
         {
             string santaPath = GetInputForDay()[0];
             HashSet<Coord> visitedHouses = new HashSet<Coord>();
@@ -21,7 +21,7 @@ namespace AOC
             }
             Submit(visitedHouses.Count);
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             string santaPath = GetInputForDay()[0];
             HashSet<Coord> visitedHouses = new HashSet<Coord>();

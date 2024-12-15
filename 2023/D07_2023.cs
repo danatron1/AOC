@@ -73,11 +73,11 @@ internal class D07_2023 : Day
             return 0;
         }
     }
-    public override void PartA()
+    public override void PartOne()
     {
         Submit(Input.Select(x => new Hand(x)).Order().WithIndex().Sum(x => (x.index+1)*x.item.bid));
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         Hand.jokerRule = true; 
         Submit(Input.Select(x => new Hand(x)).Order().WithIndex().Sum(x => (x.index + 1) * x.item.bid));

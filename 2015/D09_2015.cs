@@ -18,12 +18,12 @@ namespace AOC
                 TravellingSalesman.TryAddConnection(item.PullColumns(0, 2, 4).ToArray());
             }
         }
-        public override void PartA()
+        public override void PartOne()
         {
             MapCities();
             Submit(TravellingSalesman.GetShortest(false));
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             MapCities();
             Submit(TravellingSalesman.GetLongest(false));

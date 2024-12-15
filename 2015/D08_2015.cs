@@ -9,7 +9,7 @@ namespace AOC
 {
     internal class D08_2015 : Day
     {
-        public override void PartA()
+        public override void PartOne()
         {
             string[] input = GetInputForDay();
             int total = input.Sum(x => x.Length);
@@ -17,7 +17,7 @@ namespace AOC
             total -= input.Sum(x => x.Length);
             Submit(total);
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             string[] input = GetInputForDay();
             int total = input.Sum(x => x.Length);

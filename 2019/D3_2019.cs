@@ -88,7 +88,7 @@ namespace AOC
                 }
             }
         }
-        public override void PartA()
+        public override void PartOne()
         {
             Stopwatch sw = new Stopwatch();
             string[] input = GetInputForDay();
@@ -115,9 +115,9 @@ namespace AOC
             Copy(best);
         }
 
-        public override void Solve() => PartA();
+        public override void Solve() => PartOne();
 
-        public override void PartB()
+        public override void PartTwo()
         {
             string[] test = GetInputForDay();
             Copy(test[0]);

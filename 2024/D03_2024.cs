@@ -11,11 +11,11 @@ internal class D03_2024 : Day
 {
     const string patternA = @"mul\(\d+,\d+\)";
     const string patternB = @"mul\(\d+,\d+\)|don't\(\)|do\(\)";
-    public override void PartA()
+    public override void PartOne()
     {
         Submit(Regex.Matches(string.Join(' ',Input), patternA).Select(x => x.Value.ExtractNumbers<int>().Mul()).Sum());
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         int total = 0;
         bool flag = true;

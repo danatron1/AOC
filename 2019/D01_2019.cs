@@ -8,16 +8,16 @@ namespace AOC
 {
     internal class D01_2019 : Day<int>
     {
-        public override void PartA()
+        public override void PartOne()
         {
             int sum = 0;
             foreach (int input in Input)
             {
                 sum += (input / 3) - 2;
             }
-            Copy(sum);
+            Submit(sum);
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             int sum = 0;
             foreach (int input in Input)

@@ -11,7 +11,7 @@ internal class D17_2023 : Day<int>
 {
 
     int minToTurn = 0, maxBeforeTurn = 0;
-    public override void PartA()
+    public override void PartOne()
     {
         //useExampleInput = true;
         maxBeforeTurn = 3;
@@ -70,9 +70,9 @@ internal class D17_2023 : Day<int>
         return i-1;
     }
 
-    public override void PartB()
+    public override void PartTwo()
     {
-        useExampleInput = true;
+        //useExampleInput = true;
         maxBeforeTurn = 10;
         minToTurn = 4;
 

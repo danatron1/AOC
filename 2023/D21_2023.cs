@@ -9,7 +9,7 @@ namespace AOC.Y2023;
 
 internal class D21_2023 : Day<char>
 {
-    public override void PartA()
+    public override void PartOne()
     {
         useExampleInput = true;
         int steps = useExampleInput ? 7 : 64;
@@ -61,7 +61,7 @@ internal class D21_2023 : Day<char>
         else total += (oddOuter * n) - (evenOuter * (n + 1));
         return total;
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         //useExampleInput = true; 
         

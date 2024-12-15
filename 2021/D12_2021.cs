@@ -32,8 +32,8 @@ namespace AOC
             }
         }
         List<Cave> caves;
-        public override void Solve() => PartB();
-        public override void PartA()
+        public override void Solve() => PartTwo();
+        public override void PartOne()
         {
             MapCaves();
             int routes = FindAllRoutes();
@@ -144,7 +144,7 @@ namespace AOC
         //    }
         //    return finishedRoutes;
         //}
-        public override void PartB()
+        public override void PartTwo()
         {
             MapCaves(true);
             Stopwatch sw = new Stopwatch();

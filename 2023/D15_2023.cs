@@ -10,11 +10,11 @@ namespace AOC.Y2023;
 internal class D15_2023 : Day
 {
     int HASH(string input) => input.Aggregate(0, (a, b) => (a + b) * 17 % 256);
-    public override void PartA()
+    public override void PartOne()
     {
         Submit(InputLine.Split(',').Sum(HASH));
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         OrderedDictionary[] boxes = new OrderedDictionary[256];
         for (int i = 0; i < boxes.Length; i++) boxes[i] = new OrderedDictionary();

@@ -9,12 +9,12 @@ namespace AOC
 {
     internal class D10_2015 : Day
     {
-        public override void PartA()
+        public override void PartOne()
         {
             List<Section> sections = IterateSequence(40, GetInputForDay()[0]);
             Submit(sections.Count * 2);
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             Stopwatch sw = Stopwatch.StartNew();
             List<Section> sections = IterateSequence(50, GetInputForDay()[0]);

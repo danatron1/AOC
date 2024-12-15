@@ -8,7 +8,7 @@ namespace AOC
 {
     internal class D02_2018 : Day
     {
-        public override void PartA()
+        public override void PartOne()
         {
             int twoOfs = 0;
             int threeOfs = 0;
@@ -19,7 +19,7 @@ namespace AOC
             }
             Submit(twoOfs * threeOfs);
         }
-        public override void PartB()
+        public override void PartTwo()
         {
 
             foreach (string[] pair in Input.Pairs())

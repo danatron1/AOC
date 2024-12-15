@@ -9,11 +9,11 @@ namespace AOC
 {
     internal class D04_2015 : Day
     {
-        public override void PartA()
+        public override void PartOne()
         {
             FindMD5StartingWith("00000");
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             Submit(FindMD5StartingWith("000000"));
         }

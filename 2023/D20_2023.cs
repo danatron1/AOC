@@ -131,14 +131,14 @@ internal class D20_2023 : Day
         }
         Console.WriteLine($"After {Module.ButtonPresses} button presses, modules received {Module.LowSignals} low signals, and {Module.HighSignals} high signals");
     }
-    public override void PartA()
+    public override void PartOne()
     {
         //useExampleInput = true;
         ResetSimulation();
         RunSimulationWhile(() => Module.ButtonPresses < 1000);
         Submit(Module.HighSignals * Module.LowSignals);
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         //useExampleInput = true;
         ResetSimulation();

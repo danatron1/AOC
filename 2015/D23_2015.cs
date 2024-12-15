@@ -9,7 +9,7 @@ namespace AOC.Y2015;
 internal class D23_2015 : Day
 {
     int a, b, nextInstruction;
-    public override void PartA()
+    public override void PartOne()
     {
         nextInstruction = 0;
         while (nextInstruction >= 0 && nextInstruction < Input.Length)
@@ -18,7 +18,7 @@ internal class D23_2015 : Day
         }
         Submit(b);
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         nextInstruction = 0;
         a = 1;

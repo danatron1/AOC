@@ -2,7 +2,7 @@ namespace AOC.Y2018;
 
 internal class D03_2018 : Day
 {
-    public override void PartA()
+    public override void PartOne()
     {
         int[,] fabric = new int[1000, 1000];
         Claim[] claims = Input.Select(c => new Claim(c)).ToArray();
@@ -18,7 +18,7 @@ internal class D03_2018 : Day
         }
         Submit(fabric.Flatten().Where(i => i > 1).Count());
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         Claim[] claims = Input.Select(c => new Claim(c)).ToArray();
         Submit(claims.Where(e => claims.Without(e).All(c => !c.Overlap(e))).First().ID);

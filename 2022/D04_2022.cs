@@ -10,12 +10,12 @@ namespace AOC.Y2022
     internal class D04_2022 : Day
     {
         int[][]? splitInputs = null;
-        public override void PartA()
+        public override void PartOne()
         {
             splitInputs ??= Input.Select(s => s.Split('-', ',').ConvertTo<int>().ToArray()).ToArray();
             Submit(splitInputs.Count(x => new Interval(x[0], x[1]).ContainsOrIsContainedBy(new Interval(x[2], x[3]))));
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             splitInputs ??= Input.Select(s => s.Split('-', ',').ConvertTo<int>().ToArray()).ToArray();
             Submit(splitInputs.Count(x => new Interval(x[0], x[1]).Overlap(new Interval(x[2], x[3])).HasArea));

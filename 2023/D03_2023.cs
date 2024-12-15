@@ -52,14 +52,14 @@ internal class D03_2023 : Day<char>
             }
         }
     }
-    public override void PartA()
+    public override void PartOne()
     {
         Grid<char> inputGrid = new(Input2D, '.');
         var nums = inputGrid.Where(x => char.IsDigit(x.Value) && !char.IsDigit(inputGrid[x.Key.West]));
         PartNumber[] parts = nums.Select(x => new PartNumber(x, inputGrid)).ToArray();
         Submit(parts.Where(x => x.HasAdjacentSymbol).Sum(x => x.number));
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         Dictionary<Point2D, PartNumber> partLog = new();
         Grid<char> inputGrid = new(Input2D, '.');

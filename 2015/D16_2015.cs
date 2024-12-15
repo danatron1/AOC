@@ -8,12 +8,12 @@ namespace AOC;
 
 internal class D16_2015 : Day
 {
-    public override void PartA()
+    public override void PartOne()
     {
         Aunt[] aunts = Input.Select(row => new Aunt(row)).ToArray();
         Submit(aunts.First(a => a.properties.All(p => a.PropMatch(p))).ID);
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         Aunt[] aunts = Input.Select(row => new Aunt(row)).ToArray();
         Submit(aunts.First(a => a.properties.All(p => a.PropMatch(p, false))).ID);

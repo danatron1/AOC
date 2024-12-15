@@ -18,12 +18,12 @@ namespace AOC
                 TravellingSalesman.AddConnection(row[0], row[3], happiness, true);
             }
         }
-        public override void PartA()
+        public override void PartOne()
         {
             MapHappiness();
             Submit(TravellingSalesman.GetLongest(true));
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             MapHappiness();
             Submit(TravellingSalesman.GetLongest(false));

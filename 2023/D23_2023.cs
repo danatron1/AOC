@@ -69,7 +69,7 @@ internal class D23_2023 : Day<char>
             grid[point.Key] = 'X';
         }
     }
-    public override void PartA()
+    public override void PartOne()
     {
         //useExampleInput = true;
         Grid<char> grid = new(Input2D, '#');
@@ -105,7 +105,7 @@ internal class D23_2023 : Day<char>
         if (DirectionExt.TryFromChar(to.Value, out Direction d) && d == from.Node.DirectionFrom(to.Node)) return false;
         return true;
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         Console.ReadLine();
         //useExampleInput = true;

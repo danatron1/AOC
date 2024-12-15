@@ -8,7 +8,7 @@ namespace AOC.Y2015;
 
 internal class D20_2015 : Day<int>
 {
-    public override void PartA()
+    public override void PartOne()
     {
         int presents = 0;
         int houseNumber = 0;
@@ -20,7 +20,7 @@ internal class D20_2015 : Day<int>
         Submit(houseNumber);
     }
 
-    public override void PartB()
+    public override void PartTwo()
     {
         int presents = 0;
         int houseNumber = 0;

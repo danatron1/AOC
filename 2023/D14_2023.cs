@@ -57,13 +57,13 @@ internal class D14_2023 : Day<char>
         }
         return totalLoad;
     }
-    public override void PartA()
+    public override void PartOne()
     {
         Grid<char> grid = new Grid<char>(Input2D, '.');
         grid = ShiftRocks(grid, Direction.North);
         Submit(TotalLoad(grid, Direction.North));
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         //useExampleInput = true;
         Grid<char> grid = new Grid<char>(Input2D, '.');

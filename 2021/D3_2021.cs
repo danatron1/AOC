@@ -8,7 +8,7 @@ namespace AOC
 {
     internal class D3_2021 : Day
     {
-        public override void PartA()
+        public override void PartOne()
         {
             string[] input = GetInputForDay();
             uint gamma = 0;
@@ -25,7 +25,7 @@ namespace AOC
             Copy(gamma * epsilon);
         }
 
-        public override void PartB()
+        public override void PartTwo()
         {
             List<string> oxygen = GetInputForDay().ToList();
             List<string> scrubber = GetInputForDay().ToList();
@@ -111,6 +111,6 @@ namespace AOC
         }
 
 
-        public override void Solve() => PartB();
+        public override void Solve() => PartTwo();
     }
 }

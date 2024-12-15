@@ -8,13 +8,13 @@ namespace AOC.Y2023;
 
 internal class D06_2023 : Day
 {
-    public override void PartA()
+    public override void PartOne()
     {
         long[] times = Input[0].ExtractNumbers<long>();
         long[] distances = Input[1].ExtractNumbers<long>();
         Submit(GetWaysToWin(times, distances).Mul());
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         long[] times = Input[0].Replace(" ", null).ExtractNumbers<long>();
         long[] distances = Input[1].Replace(" ", null).ExtractNumbers<long>();

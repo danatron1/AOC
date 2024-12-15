@@ -115,13 +115,13 @@ internal class D16_2023 : Day<char>
             Energise(start, b);
         }
     }
-    public override void PartA()
+    public override void PartOne()
     {
         //useExampleInput = true;
         MirrorField mirrors = new MirrorField(new Grid<char>(Input2D, '.'));
         Submit(mirrors.StartFrom(mirrors.grid.GetCorners().TopLeft.West, Direction.East));
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         //useExampleInput = true;
         MirrorField mirrors = new MirrorField(new Grid<char>(Input2D, '.'));

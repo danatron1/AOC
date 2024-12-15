@@ -99,11 +99,11 @@ internal class D22_2015 : Day
             game.RemoveExpiredEffects();
         }
     }
-    public override void PartA()
+    public override void PartOne()
     {
         Submit(FindLowestSuccessfulMana());
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         Submit(FindLowestSuccessfulMana(true));
     }

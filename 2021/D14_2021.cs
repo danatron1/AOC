@@ -12,7 +12,7 @@ namespace AOC
         Tally<string> pairs;
         Tally<char> letterCounts;
         Dictionary<string, char> rules;
-        public override void PartA()
+        public override void PartOne()
         {
             LoadData();
             Stopwatch sw = new Stopwatch();
@@ -23,7 +23,7 @@ namespace AOC
             Copy(letterCounts.Max() - letterCounts.Min());
         }
 
-        public override void PartB()
+        public override void PartTwo()
         {
             LoadData();
             Stopwatch sw = new Stopwatch();
@@ -65,6 +65,6 @@ namespace AOC
                 pairs = newPairs;
             }
         }
-        public override void Solve() => PartB();
+        public override void Solve() => PartTwo();
     }
 }

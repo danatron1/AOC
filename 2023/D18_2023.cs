@@ -10,7 +10,7 @@ namespace AOC.Y2023;
 
 internal class D18_2023 : Day
 {
-    public override void PartA()
+    public override void PartOne()
     {
         useExampleInput = true;
         Grid<char> grid = new Grid<char>('.');
@@ -44,7 +44,7 @@ internal class D18_2023 : Day
         if (useExampleInput) grid.PrintBoard();
         Submit(grid.Count);
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         //useExampleInput = true;
         int amount, perimeter = 0;

@@ -44,13 +44,13 @@ internal class D21_2015 : Day
         }
     }
     Character you, boss;
-    public override void Setup()
+    internal override void Setup()
     {
         LoadShop();
         boss = new(Input.Select(s => int.Parse(s.Split(' ')[^1])).ToArray());
         you = new Character(100, 0, 0);
     }
-    public override void PartA()
+    public override void PartOne()
     {
         int lowest = int.MaxValue;
         #region Original solution - faster but less neat
@@ -86,7 +86,7 @@ internal class D21_2015 : Day
         //also one line solution because why not;
         //Submit(LegalLoadouts().Where(l => you.CanBeat(boss, l)).MinBy(c => c.Sum(d => d.Cost)).Sum(d => d.Cost));
     }
-    public override void PartB()
+    public override void PartTwo()
     {
         int highest = 0;
         foreach (IEnumerable<ShopItem> loadout in LegalLoadouts())

@@ -50,7 +50,7 @@ public static class Utility
         var methodInfo = typeof(T).GetMethod("Parse", BindingFlags.Public | BindingFlags.Static, new[] { typeof(string) });
         if (methodInfo == null || methodInfo.ReturnType != typeof(T))
         {
-            throw new Exception("Type does not have a parse method.");
+            throw new Exception(Canned.Exceptions.TypeHasNoParseMethod);
         }
         return (Func<string, T>)methodInfo.CreateDelegate(Expression.GetFuncType(typeof(string), typeof(T)));
     }   /**/
@@ -79,9 +79,9 @@ public static class Utility
         }
         Console.WriteLine($"\nWait complete");
     }
-    public static string[] GetUserInputs(string? saveToFilePath = null)
+    public static string[] GetMultipleInputs(string? saveToFilePath = null)
     {
-        Console.WriteLine("Please input below. Input blank line when you're done");
+        Console.WriteLine(Canned.Messages.GetUserInput);
         List<string> inputs = new();
         while (true)
         {
@@ -91,6 +91,17 @@ public static class Utility
         }
         if (saveToFilePath != null) File.WriteAllLines(saveToFilePath, inputs.ToArray());
         return inputs.ToArray();
+    }
+    public static bool UserInputConfirm()
+    {
+        return UserInputCharacter("yes", "no") == 'y';
+    }
+    public static char? UserInputCharacter(params string[] options)
+    {
+        string optionList = string.Join(" / ", options.Select(s => $"*{s[0]}*{s[1..]}")); //emphasise first letter
+        Emphasis($"OPTIONS: ( {optionList} )", ConsoleColor.Cyan);
+        string? response = Console.ReadLine()?.ToLower();
+        return response?[0] ?? null;
     }
     public static string AsTime(this TimeSpan t)
     { 
@@ -105,5 +116,22 @@ public static class Utility
     {
         yield return startingAt;
         while (true) yield return startingAt += stepsOf;
+    }
+    /// <summary>
+    /// Prints a message to have text surrounded with *asterisks* emphasised
+    /// </summary>
+    /// <param name="message"></param>
+    public static void Emphasis(string? message, ConsoleColor emphasisColour = ConsoleColor.White)
+    {
+        if (message is null) return;
+        bool bold = message[0] == '*';
+        foreach (string line in message.Split('*'))
+        {
+            Console.ForegroundColor = bold ? emphasisColour : ConsoleColor.Gray;
+            Console.Write(line);
+            bold = !bold;
+        }
+        Console.ForegroundColor = ConsoleColor.Gray;
+        Console.WriteLine(); 
     }
 }

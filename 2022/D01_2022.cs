@@ -8,11 +8,11 @@ namespace AOC.Y2022
 {
     internal class D01_2022 : Day<int>
     {
-        public override void PartA()
+        public override void PartOne()
         {
             Submit(InputBlocks.Select(x => x.Sum()).Max());
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             Submit(InputBlocks.Select(x => x.Sum()).OrderDescending().Take(3).Sum());
         }

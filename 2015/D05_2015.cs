@@ -9,12 +9,12 @@ namespace AOC
 {
     internal class D05_2015 : Day
     {
-        public override void PartA()
+        public override void PartOne()
         {
             string[] naughtyList = GetInputForDay();
             Submit(naughtyList.Count(x => IsNice(x)));
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             string[] naughtyList = GetInputForDay();
             Submit(naughtyList.Count(x => IsNicev2(x)));

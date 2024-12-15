@@ -70,13 +70,13 @@ namespace AOC.Y2022
                 else current.AddContent(split);
             }
         }
-        public override void PartA()
+        public override void PartOne()
         {
             Folder drive = new("/", null);
             MapDrive(drive);
             Submit(Folder.AllFolders.Where(x => x.Size <= 100_000).Sum(x => x.Size));
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             Folder drive = new("/", null);
             MapDrive(drive);

@@ -2,7 +2,7 @@ namespace AOC
 {
     internal class D06_2015 : Day
     {
-        public override void PartA()
+        public override void PartOne()
         {
             List<Light> lights = Light.CreateGrid(1000);
             Instruction[] instructions = GetInstructions();
@@ -16,7 +16,7 @@ namespace AOC
             }
             Submit(lights.Count(x => x.on));
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             List<NewLight> lights = NewLight.CreateGrid(1000);
             Instruction[] instructions = GetInstructions();

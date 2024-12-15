@@ -9,8 +9,8 @@ namespace AOC
     internal class D11_2021 : Day
     {
         int[,] octopus;
-        public override void Solve() => PartB();
-        public override void PartA()
+        public override void Solve() => PartTwo();
+        public override void PartOne()
         {
             octopus = GetInputForDay2D<int>();
             int flashed = 0;
@@ -72,7 +72,7 @@ namespace AOC
                 if (octopus[x, y] > 9) octopus[x, y] = 0;
             }
         }
-        public override void PartB()
+        public override void PartTwo()
         {
             octopus = GetInputForDay2D<int>();
             int lastFlashed = 0, flashed = 0;

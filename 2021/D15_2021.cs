@@ -49,7 +49,7 @@ namespace AOC
             public static bool operator ==(Point p1, Point p2) => p1.Equals(p2);
             public static bool operator !=(Point p1, Point p2) => !p1.Equals(p2);
         }
-        public override void PartA()
+        public override void PartOne()
         {
             int[,] input = GetInputForDay2D<int>();
             Point start = new Point(0, 0);
@@ -81,7 +81,7 @@ namespace AOC
             Copy(costSoFar[end]);
         }
 
-        public override void PartB()
+        public override void PartTwo()
         {
             #region Initialise Inputs
             int[,] input = GetInputForDay2D<int>();
@@ -128,6 +128,6 @@ namespace AOC
             }
         }
 
-        public override void Solve() => PartB();
+        public override void Solve() => PartTwo();
     }
 }
