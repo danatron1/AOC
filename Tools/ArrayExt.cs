@@ -184,8 +184,8 @@ public static class ArrayExt
     /// <typeparam name="T">The type of the passed array</typeparam>
     /// <param name="array">The array to iterate over and find pairs for</param>
     /// <param name="groupsOf">The size of each returned group, default 2 (pairs)</param>
-    /// <param name="orderMatters">If turned true, [0, 1] and [1, 0] will be considered different and both return.</param>
-    /// <param name="allowDuplicates">If turned true, [0, 0] and [1, 1] will be considered valid and be returned.</param>
+    /// <param name="orderMatters">If turned true, ["Red", "Green"] and ["Green", "Red"] will be considered different and both return.</param>
+    /// <param name="allowDuplicates">If turned true, ["Red", "Red"] will be considered valid and be returned.</param>
     /// <returns>Each possible pair, as a list of arrays of length groupsOf</returns>
     public static IEnumerable<T[]> Pairs<T>(this IEnumerable<T> array, int groupsOf = 2, bool orderMatters = false, bool allowDuplicates = false)
     {
