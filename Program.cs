@@ -1,1 +1,1 @@
-﻿Day.Solve(2024, 8);
+﻿Day.Solve(2024, 1);

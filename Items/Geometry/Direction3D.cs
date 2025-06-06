@@ -42,7 +42,6 @@ namespace AOC.Items.Geometry
             c = char.ToUpper(c);
             return c switch
             {
-                //up
                 'U' => Direction3D.Up,
                 'N' => Direction3D.North,
                 'E' => Direction3D.East,
