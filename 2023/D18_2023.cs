@@ -18,7 +18,7 @@ internal class D18_2023 : Day
         foreach (string line in Input)
         {
             string[] split = line.Split(' ');
-            Direction direction = DirectionExt.FromChar(split[0][0]);
+            Direction direction = split[0][0].ToDirection();
             int amount = int.Parse(split[1]);
             char c = direction.Vertical() ? '|' : '-';
             if (direction.North())
@@ -66,7 +66,7 @@ internal class D18_2023 : Day
         if (partA)
         {
             amount = int.Parse(split[1]);
-            return DirectionExt.FromChar(line[0]);
+            return DirectionExt.ToDirection(line[0]);
         }
         amount = HexToDec(split[2][2..7]);
         return (Direction)((int.Parse(split[2][7..8]) + 1) % 4);

@@ -566,7 +566,7 @@ public abstract class DayBase<InputType> : IDay
         if (DateTimeOffset.Now.ToUnixTimeSeconds() - latestSubmissionTime < WebsiteInteraction.secondsBetweenSubmissions)
         {
             Console.WriteLine($"It's been less than {WebsiteInteraction.secondsBetweenSubmissions} seconds since your last submission.");
-            Utility.Wait(WebsiteInteraction.secondsBetweenSubmissions - latestSubmissionTime);
+            Utility.Wait(WebsiteInteraction.secondsBetweenSubmissions - (DateTimeOffset.Now.ToUnixTimeSeconds() - latestSubmissionTime));
         }
         latestSubmissionTime = DateTimeOffset.Now.ToUnixTimeSeconds();
         if (answer is "-1" or "0" or "1") //double check common fail values (dummy values)

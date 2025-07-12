@@ -11,6 +11,10 @@ public class Grid<T> : ICloneable, IEnumerable<KeyValuePair<Point2D, T>> where T
     public int Count => points.Count;
 
     public Grid() { }
+    public Grid(int maxX, int maxY, int minX = 0, int minY = 0)
+    {
+        SetLimits(maxX, maxY, minX, minY);
+    }
     public Grid(IEnumerable<KeyValuePair<Point2D, T>> grid)
     {
         foreach (var item in grid)

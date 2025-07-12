@@ -31,7 +31,7 @@ namespace AOC.Items.Geometry
             };
         }
         const string ConvertableChars = "^><VURDLNESW";
-        internal static Direction FromChar(char c)
+        internal static Direction ToDirection(this char c)
         {
             c = char.ToUpper(c);
             return c switch
@@ -51,7 +51,7 @@ namespace AOC.Items.Geometry
         {
             if (ConvertableChars.Contains(char.ToUpper(c)))
             {
-                dir = FromChar(c);
+                dir = ToDirection(c);
                 return true;
             }
             else
