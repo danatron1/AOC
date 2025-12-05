@@ -145,7 +145,7 @@ public static class Canned
 
         internal static string DuplicateAnswerMessage(IDay day, string answer, string otherAnswer)
         {
-            Console.WriteLine($"You previously submitted an answer of {answer}, and got the response;\n{otherAnswer}.\t");
+            Console.WriteLine($"You previously submitted an answer of {answer}, and got the response; {otherAnswer}.\t");
             Console.WriteLine($"The answer is {Messages.RangeString(day)}.");
             return DuplicateAnswer;
         }

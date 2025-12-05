@@ -553,7 +553,7 @@ public abstract class DayBase<InputType> : IDay
                 else return Canned.SubmitResponse.AlreadySolved;
             }
             //don't submit if you've already submitted this answer
-            if (log.Answer == answer && log.Response != Canned.LogResponse.Undetermined) duplicate = log.Answer;
+            if (log.Answer == answer && log.Response != Canned.LogResponse.Undetermined) duplicate = log.Response;
             //calculate range
             if      (log.Response == Canned.LogResponse.IncorrectLow)  day.ImproveMinMaxGuesses(log.AnswerLong, null, part);
             else if (log.Response == Canned.LogResponse.IncorrectHigh) day.ImproveMinMaxGuesses(null, log.AnswerLong, part);
