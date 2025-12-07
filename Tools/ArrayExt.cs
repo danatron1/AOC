@@ -420,6 +420,7 @@ public static class ArrayExt
     public static int Mul(this IEnumerable<int> array) => array.Aggregate(1, (a, b) => a * b);
     public static long Mul(this IEnumerable<long> array) => array.Aggregate<long, long>(1, (a, b) => a * b);
     public static long MulAsLong(this IEnumerable<int> array) => array.Select(i => (long)i).Mul();
+    public static long SumAsLong(this IEnumerable<int> array) => array.Select(i => (long)i).Sum();
     public static IEnumerable<T> Shortest<T>(this IEnumerable<IEnumerable<T>> array) => array.MinBy(x => x.Count());
     public static IEnumerable<T> Longest<T>(this IEnumerable<IEnumerable<T>> array) => array.MaxBy(x => x.Count());
     public static IEnumerable<int> Counts<T>(this IEnumerable<IEnumerable<T>> array) => array.Select(x => x.Count());
