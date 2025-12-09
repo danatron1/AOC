@@ -313,30 +313,6 @@ public class Grid<T> : ICloneable, IEnumerable<KeyValuePair<Point2D, T>> where T
     {
         return GetEnumerator();
     }
-    public Graph ToGraph() => ToGraph(_ => true);
-    public Graph ToGraph(Func<(T from, T to), bool> connectionRule)
-    {
-        Graph graph = new Graph();
-        foreach (var item in points)
-        {
-            Graph.Vertex vert = graph.GetOrCreateNamedVertex(item.Key.ToString());
-            vert.Value = item.Value;
-            foreach (Point2D adj in item.Key.Adjacent())
-            {
-                if (points.TryGetValue(adj, out T value)) //if adjacent node exists
-                {
-                    Graph.Vertex v = graph.GetOrCreateNamedVertex(adj.ToString());
-                    v.Value = value;
-                    if (vert.Value is T t1 && v.Value is T t2 && connectionRule((t1, t2)))
-                    {
-                        graph.ConnectVertices(vert, v, mutual: false);
-                    }
-                }
-            }
-        }
-        return graph;
-    }
-
     internal void Clear()
     {
         points.Clear();

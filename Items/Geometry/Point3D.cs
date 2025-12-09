@@ -1,15 +1,10 @@
 ﻿using AOC.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AOC.Items.Geometry
 {
-    public struct Point3D : IEquatable<Point3D>, IEqualityComparer<Point3D>,
+    public struct Point3D : IPoint<Point3D>, IEquatable<Point3D>, IEqualityComparer<Point3D>,
     IAdditionOperators<Point3D, Point3D, Point3D>, ISubtractionOperators<Point3D, Point3D, Point3D>,
     IMultiplyOperators<Point3D, int, Point3D>, IDivisionOperators<Point3D, int, Point3D>, IComparable<Point3D>,
     IPathfinderNode<Point3D>
@@ -23,6 +18,10 @@ namespace AOC.Items.Geometry
         public readonly Point3D South => (X, Y - 1, Z);
         public readonly Point3D West => (X - 1, Y, Z);
         public readonly Point3D Down => (X, Y, Z - 1);
+
+        public static Point3D Zero => new Point3D(0,0,0);
+        public static Point3D One => new Point3D(1,1,1);
+
         public Point3D() : this(0, 0, 0) { }
         public Point3D(int x, int y, int z)
         {
@@ -90,11 +89,11 @@ namespace AOC.Items.Geometry
             }
         }
         public readonly int ManhattanDistanceTo(Point3D other) => Math.Abs(other.X - X) + Math.Abs(other.Y - Y) + Math.Abs(other.Z - Z);
-        public readonly double PythagorasDistanceTo(Point3D other)
+        public readonly double EuclideanDistanceTo(Point3D other)
         {
-            double x = Math.Abs(other.X - X);
-            double y = Math.Abs(other.Y - Y);
-            double z = Math.Abs(other.Z - Z);
+            double x = other.X - X;
+            double y = other.Y - Y;
+            double z = other.Z - Z;
             return Math.Sqrt(x * x + y * y + z * z);
         }
         internal readonly Point3D NextIn(Direction3D? dir, int distance = 1)

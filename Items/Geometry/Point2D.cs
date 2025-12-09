@@ -1,19 +1,9 @@
 ﻿using AOC.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AOC.Items.Geometry;
 
-public struct Point2D : IEquatable<Point2D>, IEqualityComparer<Point2D>,
-    IAdditionOperators<Point2D, Point2D, Point2D>, ISubtractionOperators<Point2D, Point2D, Point2D>,
-    IMultiplyOperators<Point2D, int, Point2D>, IDivisionOperators<Point2D, int, Point2D>, IComparable<Point2D>,
-    IPathfinderNode<Point2D>
+public struct Point2D : IPoint<Point2D>
 {
     public int X { get; init; }
     public int Y { get; init; }
@@ -21,6 +11,10 @@ public struct Point2D : IEquatable<Point2D>, IEqualityComparer<Point2D>,
     public readonly Point2D East => (X + 1, Y);
     public readonly Point2D South => (X, Y - 1);
     public readonly Point2D West => (X - 1, Y);
+
+    public static Point2D Zero => new Point2D(0, 0);
+    public static Point2D One => new Point2D(1, 1);
+
     public Point2D() : this(0, 0) { }
     public Point2D(int x, int y)
     {
@@ -72,10 +66,10 @@ public struct Point2D : IEquatable<Point2D>, IEqualityComparer<Point2D>,
         yield return (West, Direction.West);
     }
     public readonly int ManhattanDistanceTo(Point2D other) => Math.Abs(other.X - X) + Math.Abs(other.Y - Y);
-    public readonly double PythagorasDistanceTo(Point2D other)
+    public readonly double EuclideanDistanceTo(Point2D other)
     {
-        double x = Math.Abs(other.X - X);
-        double y = Math.Abs(other.Y - Y);
+        double x = other.X - X;
+        double y = other.Y - Y;
         return Math.Sqrt(x * x + y * y);
     }
     public override readonly string ToString() => $"({X}, {Y})";
